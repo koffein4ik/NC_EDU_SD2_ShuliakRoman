@@ -1,14 +1,29 @@
 package com.nc.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "hashtags", schema = "photosquare")
 public class HashtagsEntity {
     private int htagId;
     private String text;
-    private Integer posts;
+
+    private Set<PostsEntity> posts = new HashSet<>();
+
+    @ManyToMany(mappedBy = "hashtags")
+    @JsonBackReference
+    public Set<PostsEntity> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(Set<PostsEntity> posts) {
+        this.posts = posts;
+    }
 
     @Id
     @Column(name = "htag_id")
@@ -30,28 +45,17 @@ public class HashtagsEntity {
         this.text = text;
     }
 
-    @Basic
-    @Column(name = "posts")
-    public Integer getPosts() {
-        return posts;
-    }
-
-    public void setPosts(Integer posts) {
-        this.posts = posts;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         HashtagsEntity that = (HashtagsEntity) o;
         return htagId == that.htagId &&
-                Objects.equals(text, that.text) &&
-                Objects.equals(posts, that.posts);
+                Objects.equals(text, that.text);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(htagId, text, posts);
+        return Objects.hash(htagId, text);
     }
 }

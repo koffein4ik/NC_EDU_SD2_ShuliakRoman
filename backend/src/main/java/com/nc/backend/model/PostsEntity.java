@@ -1,18 +1,40 @@
 package com.nc.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "posts", schema = "photosquare")
 public class PostsEntity {
     private int postId;
-    private Integer userId;
-    private Integer photoId;
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private UserEntity user;
     private String description;
     private Timestamp date;
     private String location;
+
+    private Set<HashtagsEntity> hashtags = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "posthashtags",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "hashtag_id")
+    )
+    @JsonManagedReference
+    public Set<HashtagsEntity> getHashtags() {
+        return hashtags;
+    }
+
+    public void setHashtags(Set<HashtagsEntity> hashtags) {
+        this.hashtags = hashtags;
+    }
 
     @Id
     @Column(name = "post_id")
@@ -22,26 +44,6 @@ public class PostsEntity {
 
     public void setPostId(int postId) {
         this.postId = postId;
-    }
-
-    @Basic
-    @Column(name = "user_id")
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    @Basic
-    @Column(name = "photo_id")
-    public Integer getPhotoId() {
-        return photoId;
-    }
-
-    public void setPhotoId(Integer photoId) {
-        this.photoId = photoId;
     }
 
     @Basic
@@ -80,8 +82,6 @@ public class PostsEntity {
         if (o == null || getClass() != o.getClass()) return false;
         PostsEntity that = (PostsEntity) o;
         return postId == that.postId &&
-                Objects.equals(userId, that.userId) &&
-                Objects.equals(photoId, that.photoId) &&
                 Objects.equals(description, that.description) &&
                 Objects.equals(date, that.date) &&
                 Objects.equals(location, that.location);
@@ -89,6 +89,6 @@ public class PostsEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(postId, userId, photoId, description, date, location);
+        return Objects.hash(postId, description, date, location);
     }
 }
