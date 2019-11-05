@@ -1,7 +1,11 @@
+import { User } from './user'; 
+import { Hashtag } from './hashtag';
+
 export class Post {
-    post_id: number;
-    user_id: number;
+    postId: number;
+    user: User;
     description: string;
     date: string;
     location: string;
+    hashtags: Hashtag[];
 }
