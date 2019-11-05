@@ -1,0 +1,6 @@
+<p>feedpage works!</p>
+<!-- <p>{{this.postComponents | json}}</p> -->
+<!-- <li *ngFor="let postComponent of postComponents">{{postComponent | json}}</li> -->
+<li *ngFor="let post of posts">
+    <app-post [post]="post">p</app-post>
+</li>
