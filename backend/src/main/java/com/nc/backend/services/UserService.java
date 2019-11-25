@@ -7,8 +7,16 @@ import java.util.Optional;
 
 public interface UserService {
     public Iterable<UserEntity> findAll();
+
     public Optional<UserEntity> findById(Integer id);
-    public Optional<UserEntity> getUserByNickname(String nickname);
+
+    public Optional<UserEntity> authorize(String nickname, String password);
+
     public String regNewUser(UserEntity userEntity);
+
     public void save(UserEntity u);
+
+    Optional<UserEntity> findByNickname(String nickname);
+
+    //Optional<UserEntity> findByNicknameAndPassword(String nickname, String password);
 }

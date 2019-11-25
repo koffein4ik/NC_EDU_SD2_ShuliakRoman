@@ -3,8 +3,6 @@ package com.nc.backend.services;
 import com.nc.backend.model.UserEntity;
 import com.nc.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -30,14 +28,23 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id);
     }
 
+//    @Override
+//    public Optional<UserEntity> findByNicknameAndPassword(String nickname, String password) {
+//        return userRepository.findByNicknameAndPassword(nickname, password);
+//    }
+
     @Override
-    public Optional<UserEntity> getUserByNickname(String nickname) {
-        Optional<UserEntity> userEntity = Optional.of(userRepository.findByNickname(nickname));
-        return userEntity;
+    public Optional<UserEntity> authorize(String nickname, String password) {
+        return userRepository.findByNicknameAndPassword(nickname, password);
     }
 
     @Override
     public void save(UserEntity u) {
         userRepository.save(u);
+    }
+
+    @Override
+    public Optional<UserEntity> findByNickname(String nickname) {
+        return userRepository.findByNickname(nickname);
     }
 }
