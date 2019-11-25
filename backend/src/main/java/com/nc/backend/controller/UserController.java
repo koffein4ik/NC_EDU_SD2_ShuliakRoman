@@ -1,6 +1,7 @@
 package com.nc.backend.controller;
 
 import com.nc.backend.model.UserEntity;
+import com.nc.backend.model.LoginData;
 import com.nc.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,18 +27,21 @@ public class UserController {
         userService.save(user1);
         return "Updated successfully";
     }
-
-    @CrossOrigin(origins = "http://localhost:4200")
+    
     @PostMapping(value = "/regnewuser", consumes = "application/json", produces = "application/json")
     public UserEntity regNewUser(@RequestBody UserEntity userEntity) {
         userService.regNewUser(userEntity);
         return userEntity;
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value = "/nickname/{nickname}", method = RequestMethod.GET)
     public UserEntity getUserByNickname(@PathVariable(name = "nickname") String nickname) {
-        Optional<UserEntity> userEntity = userService.getUserByNickname(nickname);
+        Optional<UserEntity> userEntity = userService.findByNickname(nickname);
         return userEntity.get();
+    }
+
+    @RequestMapping(value = "authorization", method = RequestMethod.POST)
+    public Optional authorize(@RequestBody LoginData userLoginData) {
+        return userService.authorize(userLoginData.getLogin(), userLoginData.getPassword());
     }
 }
