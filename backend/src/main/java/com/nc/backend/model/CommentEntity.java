@@ -10,6 +10,28 @@ public class CommentEntity {
     private int commentId;
     private String text;
     private Timestamp date;
+    private UserEntity user;
+    private PostsEntity post;
+
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
+    @ManyToOne
+    @JoinColumn(name="post_id")
+    public PostsEntity getPost() {
+        return post;
+    }
+
+    public void setPost(PostsEntity post) {
+        this.post = post;
+    }
 
     @Id
     @Column(name = "comment_id")

@@ -8,10 +8,31 @@ import java.util.Objects;
 @Table(name = "reports", schema = "photosquare")
 public class ReportsEntity {
     private int reportId;
-    private Integer postId;
     private Timestamp date;
     private String reason;
     private ReportStatus status;
+    private UserEntity user;
+    private PostsEntity post;
+
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
+    @ManyToOne
+    @JoinColumn(name="post_id")
+    public PostsEntity getPost() {
+        return post;
+    }
+
+    public void setPost(PostsEntity post) {
+        this.post = post;
+    }
 
     @Id
     @Column(name = "report_id")
@@ -21,16 +42,6 @@ public class ReportsEntity {
 
     public void setReportId(int reportId) {
         this.reportId = reportId;
-    }
-
-    @Basic
-    @Column(name = "post_id")
-    public Integer getPostId() {
-        return postId;
-    }
-
-    public void setPostId(Integer postId) {
-        this.postId = postId;
     }
 
     @Basic
@@ -69,7 +80,6 @@ public class ReportsEntity {
         if (o == null || getClass() != o.getClass()) return false;
         ReportsEntity that = (ReportsEntity) o;
         return reportId == that.reportId &&
-                Objects.equals(postId, that.postId) &&
                 Objects.equals(date, that.date) &&
                 Objects.equals(reason, that.reason) &&
                 Objects.equals(status, that.status);
@@ -77,6 +87,6 @@ public class ReportsEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(reportId, postId, date, reason, status);
+        return Objects.hash(reportId, date, reason, status);
     }
 }

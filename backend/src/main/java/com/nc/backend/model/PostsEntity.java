@@ -13,8 +13,6 @@ import java.util.Set;
 @Table(name = "posts", schema = "photosquare")
 public class PostsEntity {
     private int postId;
-    @ManyToOne
-    @JoinColumn(name="user_id")
     private UserEntity user;
     private String description;
     private Timestamp date;
@@ -35,6 +33,17 @@ public class PostsEntity {
     public void setHashtags(Set<HashtagsEntity> hashtags) {
         this.hashtags = hashtags;
     }
+
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
 
     @Id
     @Column(name = "post_id")
@@ -81,10 +90,7 @@ public class PostsEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PostsEntity that = (PostsEntity) o;
-        return postId == that.postId &&
-                Objects.equals(description, that.description) &&
-                Objects.equals(date, that.date) &&
-                Objects.equals(location, that.location);
+        return postId == that.postId;
     }
 
     @Override
