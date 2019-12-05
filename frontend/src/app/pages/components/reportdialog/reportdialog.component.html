@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>Report</h2>
+<div mat-dialog-content>
+  <p>Why do you want to report this post?</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="reason">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancelClick()">Cancel</button>
+  <button mat-button (click)="onSendClick()" cdkFocusInitial>Ok</button>
+</div>

@@ -1,0 +1,25 @@
+<div *ngIf="showComments == true">
+    <div class="comment-list">
+        <div *ngFor="let comment of comments" class="comment">
+            <div>
+                <div class="comment-top">
+                    <img class="avatar" routerLink="{{'/user//' + comment.user.nickname}}" src="http://localhost:8081/api/posts/images/1/1/picture1.jpg">
+                    <p routerLink="{{'/user//' + comment.user.nickname}}" class="nickname">{{comment.user.nickname}}</p>
+                </div>
+                <p class="comment-text">{{comment.text}}</p>
+                <p class="date">{{comment.date | date}}</p>
+            
+            </div>
+        </div>
+    </div>
+    <button mat-raised-button color="primary" class="hide-button" (click)="hideCommentsClick()">Hide comments</button>
+</div>
+<button *ngIf="showComments == false" mat-raised-button color="primary" (click)="showCommentsClick()">Show comments</button>
+<div class="submit-comment">
+    <form #commentForm = "ngForm" (ngSubmit) = "onClickSubmit(commentForm.value)" class="tp-full-width">
+        <mat-form-field class="tp-full-width">
+            <textarea matInput placeholder="Leave a comment" name="commentText" ngModel></textarea>
+        </mat-form-field>
+        <button type="submit" mat-raised-button color="primary">Submit</button>
+    </form>
+</div>

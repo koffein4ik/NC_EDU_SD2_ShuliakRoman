@@ -1,0 +1,27 @@
+<div class="report-top">
+    <h4>Reports</h4>
+    <h5 *ngIf="!displayCheckedReports">You are seeing unchecked reports</h5>
+    <h5 *ngIf="displayCheckedReports">You are seeing checked reports</h5>
+    <button *ngIf="!displayCheckedReports" mat-raised-button color="primary" class="action-button" (click)="displayChecked()">Display checked reports</button>
+<button *ngIf="displayCheckedReports" mat-raised-button color="primary" class="action-button" (click)="displayChecked()">Display unchecked reports</button>
+</div>
+<div *ngFor="let report of reports">
+    <div class="report">
+        <div class="report-header">
+            <div class="report-text">
+                <p routerLink="{{'/user/' + report.senderUser.nickname}}" class="nickname">{{report.senderUser.nickname}}</p>
+                <p class="reason"> reported this post for '{{report.reason}}' at {{report.date | date}}</p>
+                <p class="status">Report status: {{report.status}}</p>
+                <p class="status">User status: {{report.reportedUser.status}}</p>
+            </div>
+            <div class="actions">
+                <p class="available-actions">Availbale actions:</p>
+                <button *ngIf="report.reportedUser.status == 'active'" mat-raised-button color="primary" class="action-button" (click)="blockUser(report.reportedUser.id)">Block user</button>
+                <button *ngIf="report.reportedUser.status == 'banned'" mat-raised-button color="primary" class="action-button" (click)="unblockUser(report.reportedUser.id)">Unblock user</button>
+                <button mat-raised-button color="primary" class="action-button" (click)="deletePost(report.post)">Delete post</button>
+                <button *ngIf="report.status == 'unchecked'" mat-raised-button color="primary" class="last-action-button" (click)="markAsChecked(report.reportId)">Mark as checked</button>
+            </div>
+        </div>
+        <app-post [post]="report.post"></app-post>
+    </div>
+</div>

@@ -1,0 +1,44 @@
+<p *ngIf="!user">You have to be authorized to edit your info</p>
+<div *ngIf="user" class="edit-fields">
+    <form #editForm = "ngForm" class = "edit-form" (ngSubmit) = "onClickSubmit(editForm.value)">
+            <div class="container">
+                <h5>Fill those fields to edit your info</h5>
+                <hr>
+          
+                <mat-form-field class="example-full-width input-field">
+                  <input matInput placeholder="Name" [(ngModel)]="user.name" name="name">
+                </mat-form-field>
+              
+                <mat-form-field class="example-full-width input-field">
+                  <input  matInput placeholder="Surname" [(ngModel)]="user.surname" name="surname">
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width input-field">
+                    <input  matInput placeholder="Profile description" [(ngModel)]="user.profileDescription" name="profileDescription">
+                </mat-form-field>
+        
+                <button type="submit" class="submit-btn" mat-raised-button color="primary">Submit</button>
+    
+            </div>
+    </form>
+</div>
+<p *ngIf="updated" class="updated">Updated successfully</p>
+
+<div class="updateavatar">
+    <form #updateAvatarForm = "ngForm" class = "updateavatar-form" (ngSubmit) = "onAvatarClickSubmit()">
+        <div class="container">
+          <h5>Update avatar</h5>
+          <hr>
+      
+          <div class="form-group">
+            <label for="file">Choose File</label>
+            <input type="file"
+                   id="file"
+                   (change)="handleFileInput($event.target.files)">
+        </div>
+          
+          <button type="submit" class="updatebtn">Upload</button>
+        </div>
+      
+    </form>
+</div>

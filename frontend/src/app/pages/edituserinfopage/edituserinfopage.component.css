@@ -1,0 +1,30 @@
+.edit-fields {
+    border: 3px solid #333333;
+    border-radius: 5px;
+    padding: 5px;
+    width: 40%;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.input-field {
+    width: 100% !important;
+}
+
+.updated {
+    width: 40%;
+    color: green;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.updateavatar {
+    border: 3px solid #333333;
+    border-radius: 5px;
+    padding: 5px;
+    width: 40%;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;    
+}

@@ -1,6 +1,19 @@
-<p>feedpage works!</p>
 <!-- <p>{{this.postComponents | json}}</p> -->
 <!-- <li *ngFor="let postComponent of postComponents">{{postComponent | json}}</li> -->
-<li *ngFor="let post of posts">
-    <app-post [post]="post">p</app-post>
-</li>
+<p *ngFor="let post of posts">
+    <app-post (onDelete)="delete($event)" [post]="post"></app-post>
+</p>
+<div style="width: 50%;">
+<!-- <mat-carousel [hideArrows]="false" maxWidth="475px" [autoplay]="false" proportion="100"> -->
+
+  <!-- <p *ngFor="let photoURI of post.photoURIs"> -->
+      <!-- <mat-carousel-slide>
+        <img class="d-block w-100 myimg" src= "https://scontent-frx5-1.cdninstagram.com/vp/66c0db739a823e6ac3ad371346e29874/5E437BFF/t51.2885-15/e35/70258834_186937405801901_2219798483832237967_n.jpg?_nc_ht=scontent-frx5-1.cdninstagram.com&_nc_cat=1" alt="First slide">
+      </mat-carousel-slide>
+      <mat-carousel-slide>
+        <img class="d-block w-100 myimg" src= "https://img.tyt.by/i/by4/logo-rus-20121023.png" alt="Secon slide">
+      </mat-carousel-slide> -->
+  <!-- </p> -->
+  <!-- </mat-carousel> -->
+  </div>
+

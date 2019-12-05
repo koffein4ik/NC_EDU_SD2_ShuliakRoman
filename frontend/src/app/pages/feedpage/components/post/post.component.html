@@ -1,4 +1,24 @@
-<p>post works!</p>
-<p>{{post | json}}</p>
-<p>{{post.user.nickname}}</p>
-<p>-----</p>
+<div class="post">
+    <div class="post-top">
+        <div>
+            <img class="avatar" routerLink="{{'/user/' + post.user.nickname}}" src="{{avatarUrl}}">
+            <p routerLink="{{'/user/' + post.user.nickname}}" class="nickname">{{post.user.nickname}}</p>
+        </div>
+        <div>
+            <i class="material-icons report" (click)="reportClick()">report</i>
+            <i *ngIf="currUserId == post.user.id" (click)="deleteClick()" class="material-icons remove">remove_circle_outline</i>
+        </div>
+    </div>
+    <mat-carousel [hideArrows]="false" [autoplay]="false" [proportion]="100" [hideIndicators]="false">
+            <p *ngFor="let photoURI of post.photoURIs">
+                <mat-carousel-slide style="max-width: 100%">
+                    <img class="d-block w-100 postimage" [src]=photoURI alt="First slide">
+                </mat-carousel-slide>
+            </p>
+    </mat-carousel>
+    <!-- <img src = "{{likeImage}}"> -->
+    <app-likedislike [postId]="post.postId"></app-likedislike>
+    <div class="postdescription" [innerHtml]="post.description"></div>
+    <p class="postdate">{{post.date | date}}</p>
+    <app-comment [postId]="post.postId"></app-comment>
+</div>

@@ -1,0 +1,6 @@
+<div *ngIf="likeDislike !== undefined" class="likedislike">
+    <img [src]="likeStyle" class="like" (click)="likeClick()">
+    <p class="likecount">{{likeDislike.likes}}</p>
+    <img [src]="dislikeStyle" class="dislike" (click)="dislikeClick()">
+    <p class="dislikecount">{{likeDislike.dislikes}}</p>
+</div>

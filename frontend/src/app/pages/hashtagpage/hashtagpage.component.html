@@ -1,0 +1,14 @@
+<div class="hashtag-search">
+    <form #searchForm = "ngForm" (ngSubmit) = "onClickSubmit(searchForm.value)" class="search-full-width">
+        <mat-form-field class="search-full-width">
+            <input matInput placeholder="Hashtag" name="hashtag" [(ngModel)]="initialHashtagText" ngModel>
+        </mat-form-field>
+        <button type="submit" mat-raised-button color="primary" class="search-button">Search</button>
+    </form>
+</div>
+<div *ngIf="posts !== undefined && posts.length == 0 && inputValue != '' "> 
+    <p class="noResults"> No posts with such hashtag. Try another one.</p>
+</div>
+<p *ngFor="let post of posts">
+    <app-post [post]="post"></app-post>
+</p>

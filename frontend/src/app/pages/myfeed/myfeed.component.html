@@ -1,0 +1,8 @@
+<div class="posts">
+    <p *ngFor="let post of posts">
+        <app-post (onDelete)="delete($event)" [post]="post"></app-post>
+    </p>
+</div>
+<div>
+    <p *ngIf="posts.length == 0">No posts in your feed</p>
+</div>

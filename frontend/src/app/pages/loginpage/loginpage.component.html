@@ -1,0 +1,28 @@
+<form #loginForm = "ngForm" class = "login-form" (ngSubmit) = "onClickSubmit(loginForm.value)">
+    <div class="container">
+      <h3>Log in</h3>
+      <p>Please enter your nickname and password to log in</p>
+      <hr>
+  
+        <mat-form-field class="example-full-width input-field">
+          <input matInput placeholder="Login" [(ngModel)]="login" name="login" required>
+        </mat-form-field>
+      
+        <mat-form-field class="example-full-width input-field">
+          <input type="password" matInput placeholder="Password" [(ngModel)]="password" name="password" required>
+        </mat-form-field>
+
+        <button type="submit" [disabled]="!loginForm.valid" class="submit-btn" mat-raised-button color="primary">Submit</button>
+
+        <div *ngIf="loginError == true" class="loginError">
+          <p>Wrong login or password</p>
+        </div>
+
+      <!-- <label for="nickname"><b>Nickname</b></label>
+      <input type="text" placeholder="Enter Nickname" name="nickname" ngModel required>
+  
+      <label for="psw"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="psw" ngModel required> -->
+    </div>
+</form>
+  

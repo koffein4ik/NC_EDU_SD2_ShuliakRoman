@@ -26,8 +26,6 @@ export class RegistrationComponent implements OnInit {
   }
 
   onClickSubmit(formData): void {
-    //console.log('Reg called');
-    //console.log(formData);
     this.userService.regUser(formData.nickname, formData.email, formData.firstname, 
       formData.lastname, formData.psw).subscribe(response => console.log(response));
   }

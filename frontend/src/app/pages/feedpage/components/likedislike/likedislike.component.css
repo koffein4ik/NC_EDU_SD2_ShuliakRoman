@@ -1,0 +1,39 @@
+.like {
+    /* background: no-repeat url('/../assets/like.svg'); */
+    display: inline-block;
+    height: 30px;
+    width: 30px;
+}
+
+.dislike {
+    /* background: no-repeat url('/../assets//dislikelike.svg'); */
+    display: inline-block;
+    margin-left: 20px;
+    height: 30px;
+    width: 30px;
+}
+
+.likecount {
+    display: inline-block;
+    font-size: 250%;
+    margin-top: 0px;
+    color: #00ff00;
+    margin-left: 10px;
+    margin-bottom: 0px;
+}
+
+.dislikecount {
+    display: inline-block;
+    font-size: 250%;
+    color: #ff2a00;
+    margin-left: 10px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.likedislike {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    margin-left: 10px;
+}
