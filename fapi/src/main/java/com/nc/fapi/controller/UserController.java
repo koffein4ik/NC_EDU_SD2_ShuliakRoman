@@ -13,7 +13,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -25,16 +29,6 @@ public class UserController {
 
     @Autowired
     RestTemplate restTemplate;
-
-    @CrossOrigin(origins = "http://localhost:4200")
-    @RequestMapping(value = "uploadimage", method = RequestMethod.POST, headers={"content-type=multipart/form-data"})
-    public void uploadImage(@RequestParam("fileKey")MultipartFile[] files) throws IOException{
-//        String name = file.getOriginalFilename();
-//        System.out.println(name);
-//        byte[] bytes = file.getBytes();
-//        System.out.println(bytes.length);
-        System.out.println(files.length);
-    }
 
     @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value = "authorization", method = RequestMethod.POST)
@@ -62,12 +56,48 @@ public class UserController {
     }
 
     @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping("getuserbynickname/{nickname}")
+    public ResponseEntity<UserEntity> getUserByNickname(@PathVariable(name = "nickname") String nickname) {
+        return restTemplate.getForEntity("http://localhost:8080/api/users/getuserbynickname/" + nickname, UserEntity.class);
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PostMapping("updateuserinfo")
+    public ResponseEntity<UserEntity> updateUserInfo(@RequestBody UserEntity userEntity) {
+        return restTemplate.postForEntity("http://localhost:8080/api/users/updateuserinfo", userEntity, UserEntity.class);
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping("blockuser/{userid}")
+    public void blockUser(@PathVariable(name = "userid") String userId) {
+        restTemplate.getForEntity("http://localhost:8080/api/users/blockuser/" + userId, String.class);
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping("unblockuser/{userid}")
+    public void unblockUser(@PathVariable(name = "userid") String userId) {
+        restTemplate.getForEntity("http://localhost:8080/api/users/unblockuser/" + userId, String.class);
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @RequestMapping(value = "uploadavatar", method = RequestMethod.POST, headers = {"content-type=multipart/form-data"})
+    public void uploadAvatar(@RequestParam("fileKey") MultipartFile avatar, @RequestParam("userId") String userId) throws IOException {
+        String avatarPath = "src/main/resources/userphotos/users/" + userId + "/avatar/";
+        File file = new File(avatarPath);
+        if (file.exists()) {
+            Path filePath = Paths.get(avatarPath + "avatar.jpg");
+            try (OutputStream os = Files.newOutputStream(filePath)) {
+                os.write(avatar.getBytes());
+            }
+        }
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(path = "getpost", method = RequestMethod.GET)
     public ResponseEntity<PostsEntity[]> getPost() {
         ResponseEntity<PostsEntity[]> posts = restTemplate.getForEntity("http://localhost:8080/api/posts/show", PostsEntity[].class);
         for(PostsEntity post : posts.getBody()) {
              String folderpath = "src/main/resources/userphotos/users/" + post.getUser().getId() + "/posts/" + post.getPostId();
-            //System.out.println(folderpath);
             File folder = new File(folderpath);
             File[] listOfFiles = folder.listFiles();
             Set<String> photos = new HashSet<>();
@@ -92,6 +122,26 @@ public class UserController {
         RandomAccessFile file = new RandomAccessFile(photosPath, "r");
         byte[] byteArrray = new byte[(int)file.length()];
         file.readFully(byteArrray);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(byteArrray);
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping(path = "getuseravatar/{userid}", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<byte[]> getUserAvatar(@PathVariable(name="userid") String userId) throws IOException {
+        System.out.println(System.getProperty("user.dir"));
+        String photosPath = "src/main/resources/userphotos/users/" + userId + "/avatar" + "/avatar.jpg";
+        System.out.println(photosPath);
+        File fileDir = new File(photosPath);
+        byte[] byteArrray;
+        if (fileDir.exists() && !fileDir.isDirectory()) {
+            RandomAccessFile file = new RandomAccessFile(photosPath, "r");
+            byteArrray = new byte[(int) file.length()];
+            file.readFully(byteArrray);
+        } else {
+            RandomAccessFile file = new RandomAccessFile("src/main/resources/userphotos/nosuchimage.png", "r");
+            byteArrray = new byte[(int) file.length()];
+            file.readFully(byteArrray);
+        }
         return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(byteArrray);
     }
 

@@ -1,7 +1,5 @@
 package com.nc.fapi.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Objects;
@@ -13,6 +11,7 @@ public class PostsEntity {
     private String description;
     private Timestamp date;
     private String location;
+    private Set<String> photoURIs = new HashSet<>();
 
     private Set<HashtagsEntity> hashtags = new HashSet<>();
 
@@ -23,8 +22,6 @@ public class PostsEntity {
     public void setPhotoURIs(Set<String> photoURIs) {
         this.photoURIs = photoURIs;
     }
-
-    private Set<String> photoURIs = new HashSet<>();
 
     public Set<HashtagsEntity> getHashtags() {
         return hashtags;

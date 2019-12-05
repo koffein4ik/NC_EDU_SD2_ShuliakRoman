@@ -8,15 +8,24 @@ public class ReportsEntity {
     private Timestamp date;
     private String reason;
     private ReportStatus status;
-    private UserEntity user;
     private PostsEntity post;
+    private UserEntity senderUser;
+    private UserEntity reportedUser;
 
-    public UserEntity getUser() {
-        return user;
+    public UserEntity getSenderUser() {
+        return senderUser;
     }
 
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public void setSenderUser(UserEntity senderUser) {
+        this.senderUser = senderUser;
+    }
+
+    public UserEntity getReportedUser() {
+        return reportedUser;
+    }
+
+    public void setReportedUser(UserEntity reportedUser) {
+        this.reportedUser = reportedUser;
     }
 
     public PostsEntity getPost() {
