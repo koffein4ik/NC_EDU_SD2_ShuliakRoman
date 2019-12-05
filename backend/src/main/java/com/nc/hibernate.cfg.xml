@@ -12,6 +12,7 @@
       <mapping class="com.nc.backend.model.LikedislikeEntity"/>
       <mapping class="com.nc.backend.model.PosthathtagsEntity"/>
       <mapping class="com.nc.backend.model.ReportsEntity"/>
+      <mapping class="com.nc.backend.model.UserEntity"/>
       <!-- <property name="connection.username"/> -->
     <!-- <property name="connection.password"/> -->
 

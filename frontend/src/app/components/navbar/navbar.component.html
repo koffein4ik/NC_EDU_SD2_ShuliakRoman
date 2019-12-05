@@ -1,0 +1,36 @@
+<!-- <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" routerLink="/main">Photosquare</a>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/feed">Feed</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Users</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">My account</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <div *ngIf="currUser !== null">
+        <p routerLink="{{currUserUrl}}">{{currUser}}</p>
+      </div> -->
+
+<div class="navbar">
+  <div>
+    <a routerLink="/main" class="navbar-link">Photosquare</a>
+    <a routerLink="/feed" class="navbar-link">Feed</a>
+    <a routerLink="/hashtag" class="navbar-link">Search</a>
+    <a *ngIf="!currUser" routerLink="/login" class="navbar-link">Login</a>
+    <a *ngIf="!currUser" routerLink="/registration" class="navbar-link">Registration</a>
+    <a *ngIf="currUser" routerLink="{{currUserUrl}}" class="navbar-link">My account</a>
+    <a *ngIf="currUser" routerLink="/myfeed" class="navbar-link">My feed</a>
+    <a *ngIf="currUserRole == 'admin'" routerLink="/reports" class="navbar-link">Reports</a>
+  </div>
+  <a *ngIf="currUser" routerLink="{{currUserUrl}}" class="navbar-link">Log out</a>
+</div>

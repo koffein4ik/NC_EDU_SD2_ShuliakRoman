@@ -1,22 +1,56 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { IgxDatePickerModule} from 'igniteui-angular';
 import { FormsModule } from '@angular/forms';
-
+import { IgxCarouselModule } from 'igniteui-angular';
+import { MatCarouselModule } from '@ngmodule/material-carousel';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+ 
 import { AppComponent } from './app.component';
 import { MainpageComponent } from './components/mainpage/mainpage.component';
 import { AppRoutingModule } from './app-routing.module';
-import { RegistrationComponent } from './components/registration/registration.component';
+import { RegistrationComponent } from './pages/registrationpage/components/registration/registration.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { UserpageComponent } from './components/userpage/userpage.component';
+import { UserpageComponent } from './pages/userpage/userpage.component';
+import { HomepageComponent } from './pages/homepage/homepage.component';
+import { RegistrationpageComponent } from './pages/registrationpage/registrationpage.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { FeedpageComponent } from './pages/feedpage/feedpage.component';
+import { PostComponent } from './pages/feedpage/components/post/post.component';
+import { LoginpageComponent } from './pages/loginpage/loginpage.component';
+import { AddpostpageComponent } from './pages/addpostpage/addpostpage.component';
+import { LikedislikeComponent } from './pages/feedpage/components/likedislike/likedislike.component';
+import { CommentComponent } from './pages/feedpage/components/comment/comment.component';
+import { HashtagpageComponent } from './pages/hashtagpage/hashtagpage.component';
+import { MyfeedComponent } from './pages/myfeed/myfeed.component';
+import { ReportdialogComponent } from './pages/components/reportdialog/reportdialog.component';
+import { ReportspageComponent } from './pages/reportspage/reportspage.component';
+import { EdituserinfopageComponent } from './pages/edituserinfopage/edituserinfopage.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainpageComponent,
     RegistrationComponent,
-    UserpageComponent
+    UserpageComponent,
+    HomepageComponent,
+    RegistrationpageComponent,
+    FooterComponent,
+    NavbarComponent,
+    FeedpageComponent,
+    PostComponent,
+    LoginpageComponent,
+    AddpostpageComponent,
+    LikedislikeComponent,
+    CommentComponent,
+    HashtagpageComponent,
+    MyfeedComponent,
+    ReportdialogComponent,
+    ReportspageComponent,
+    EdituserinfopageComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +58,14 @@ import { UserpageComponent } from './components/userpage/userpage.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
-    IgxDatePickerModule
+    IgxCarouselModule,
+    MatCarouselModule,
+    MatInputModule,
+    MatButtonModule,
+    MatDialogModule
+  ],
+  entryComponents: [
+    ReportdialogComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,10 @@
+.page-footer {
+    color: white;
+    text-decoration: none;
+    background-color: #3f51b5;
+    flex-shrink: 0;
+}
+
+a {
+    color: white;
+}
