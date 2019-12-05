@@ -46,6 +46,7 @@ public class PostsEntity {
 
 
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "post_id")
     public int getPostId() {
         return postId;

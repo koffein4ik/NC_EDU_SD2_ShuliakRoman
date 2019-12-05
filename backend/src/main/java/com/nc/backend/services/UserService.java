@@ -6,17 +6,22 @@ import org.springframework.http.ResponseEntity;
 import java.util.Optional;
 
 public interface UserService {
-    public Iterable<UserEntity> findAll();
+    Iterable<UserEntity> findAll();
 
-    public Optional<UserEntity> findById(Integer id);
+    Optional<UserEntity> findById(Integer id);
 
-    public Optional<UserEntity> authorize(String nickname, String password);
+    Optional<UserEntity> authorize(String nickname, String password);
 
-    public String regNewUser(UserEntity userEntity);
+    String regNewUser(UserEntity userEntity);
 
-    public void save(UserEntity u);
+    void save(UserEntity u);
 
     Optional<UserEntity> findByNickname(String nickname);
 
-    //Optional<UserEntity> findByNicknameAndPassword(String nickname, String password);
+    void banUser(Integer userId);
+
+    void unBanUser(Integer userId);
+
+    UserEntity updateUser(UserEntity userEntity);
+
 }

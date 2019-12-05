@@ -11,21 +11,33 @@ public class ReportsEntity {
     private Timestamp date;
     private String reason;
     private ReportStatus status;
-    private UserEntity user;
+    private UserEntity senderUser;
+    private UserEntity reportedUser;
     private PostsEntity post;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
-    public UserEntity getUser() {
-        return user;
+    @JoinColumn(name = "sender_user_id")
+    public UserEntity getSenderUser() {
+        return senderUser;
     }
 
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public void setSenderUser(UserEntity senderUser) {
+        this.senderUser = senderUser;
     }
 
     @ManyToOne
-    @JoinColumn(name="post_id")
+    @JoinColumn(name = "reported_user_id")
+    public UserEntity getReportedUser() {
+        return reportedUser;
+    }
+
+    public void setReportedUser(UserEntity reportedUser) {
+        this.reportedUser = reportedUser;
+    }
+
+
+    @ManyToOne
+    @JoinColumn(name = "post_id")
     public PostsEntity getPost() {
         return post;
     }
@@ -66,6 +78,7 @@ public class ReportsEntity {
 
     @Basic
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     public ReportStatus getStatus() {
         return status;
     }

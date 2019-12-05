@@ -1,7 +1,9 @@
 package com.nc.backend.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "users", schema = "photosquare")
@@ -14,6 +16,26 @@ public class UserEntity {
     private String profileDescription;
     private String password;
     private UserStatus status;
+    private Set<UserEntity> subscribers = new HashSet<>();
+    //private Set<UserEntity> subscribedTo;
+
+//    @OneToMany(mappedBy = "subscriber")
+//    public Set<UserEntity> getSubscribers() {
+//        return subscribers;
+//    }
+//
+//    public void setSubscribers(Set<UserEntity> subscribers) {
+//        this.subscribers = subscribers;
+//    }
+
+//    @OneToMany(mappedBy = "subscribedTo")
+//    public Set<UserEntity> getSubscribedTo() {
+//        return subscribedTo;
+//    }
+//
+//    public void setSubscribedTo(Set<UserEntity> subscribedTo) {
+//        this.subscribedTo = subscribedTo;
+//    }
 
     @Id
     @Column(name = "id")

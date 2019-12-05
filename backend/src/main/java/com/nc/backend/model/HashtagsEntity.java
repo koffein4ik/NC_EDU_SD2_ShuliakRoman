@@ -26,6 +26,7 @@ public class HashtagsEntity {
     }
 
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "htag_id")
     public int getHtagId() {
         return htagId;

@@ -16,6 +16,7 @@ public interface UserRepository extends PagingAndSortingRepository<UserEntity, I
 //    Optional<UserEntity> findByNickname(@Param("nickname") String nickname);
     Optional<UserEntity> findByNickname(String nickname);
     Optional<UserEntity> findByNicknameAndPassword(String nickname, String password);
+    Optional<UserEntity> findById(Integer id);
 //    Optional<UserEntity> findByNicknameAndPassword(String nickname, String password);
     //String regNewUser(UserEntity userEntity);
 }
