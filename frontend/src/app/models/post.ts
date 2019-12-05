@@ -8,4 +8,5 @@ export class Post {
     date: string;
     location: string;
     hashtags: Hashtag[];
+    photoURIs: string[];
 }
