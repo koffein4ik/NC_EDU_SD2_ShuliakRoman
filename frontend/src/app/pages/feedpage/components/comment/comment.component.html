@@ -3,7 +3,7 @@
         <div *ngFor="let comment of comments" class="comment">
             <div>
                 <div class="comment-top">
-                    <img class="avatar" routerLink="{{'/user//' + comment.user.nickname}}" src="http://localhost:8081/api/posts/images/1/1/picture1.jpg">
+                    <img class="avatar" routerLink="{{'/user//' + comment.user.nickname}}" src="{{'/api/users/getuseravatar/' + comment.user.id}}">
                     <p routerLink="{{'/user//' + comment.user.nickname}}" class="nickname">{{comment.user.nickname}}</p>
                 </div>
                 <p class="comment-text">{{comment.text}}</p>
@@ -11,15 +11,18 @@
             
             </div>
         </div>
+        <div *ngIf="comments.length == 0" class="no-comments">
+            <p>There's no comments for this post.</p>
+        </div>
     </div>
     <button mat-raised-button color="primary" class="hide-button" (click)="hideCommentsClick()">Hide comments</button>
 </div>
 <button *ngIf="showComments == false" mat-raised-button color="primary" (click)="showCommentsClick()">Show comments</button>
-<div class="submit-comment">
+<div *ngIf="currUser" class="submit-comment">
     <form #commentForm = "ngForm" (ngSubmit) = "onClickSubmit(commentForm.value)" class="tp-full-width">
         <mat-form-field class="tp-full-width">
-            <textarea matInput placeholder="Leave a comment" name="commentText" ngModel></textarea>
+            <textarea matInput placeholder="Leave a comment" name="commentText" [(ngModel)]="commentText" ngModel required></textarea>
         </mat-form-field>
-        <button type="submit" mat-raised-button color="primary">Submit</button>
+        <button type="submit" [disabled]="!commentForm.valid" mat-raised-button color="primary">Submit</button>
     </form>
 </div>

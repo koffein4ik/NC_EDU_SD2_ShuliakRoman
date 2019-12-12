@@ -5,6 +5,7 @@ import com.nc.fapi.model.UserIdPostDescription;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,16 +31,16 @@ public class PostController {
     RestTemplate restTemplate;
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @RequestMapping(path = "getallposts", method = RequestMethod.GET)
-    public ResponseEntity<PostsEntity[]> getPost() {
-        ResponseEntity<PostsEntity[]> posts = restTemplate.getForEntity("http://localhost:8080/api/posts/show", PostsEntity[].class);
+    @RequestMapping(path = "getallposts/{page}", method = RequestMethod.GET)
+    public ResponseEntity<PostsEntity[]> getPosts(@PathVariable(name = "page") String page) {
+        ResponseEntity<PostsEntity[]> posts = restTemplate.getForEntity("http://localhost:8080/api/posts/show/" + page, PostsEntity[].class);
         if (posts.getBody() != null) {
             getImagesToPosts(posts.getBody());
         }
         return posts;
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
+    @PreAuthorize("hasAnyRole('ROLE_Admin', 'ROLE_User')")
     @DeleteMapping("deletepost/{postid}/{userid}")
     public void deletePostById(@PathVariable(name = "postid") String postId,
                                @PathVariable(name = "userid") String userId) {
@@ -55,7 +56,6 @@ public class PostController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(
             path = "images/{userId}/{postId}/{photoId}",
             method = RequestMethod.GET,
@@ -69,7 +69,7 @@ public class PostController {
         return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(byteArrray);
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
+    @PreAuthorize("hasAnyRole('ROLE_Admin', 'ROLE_User')")
     @RequestMapping(value = "addnewpost", method = RequestMethod.POST, headers = {"content-type=multipart/form-data"})
     public void uploadImage(@RequestParam("fileKey") MultipartFile[] files, @RequestParam("userId") String userId,
                             @RequestParam("postDescription") String postDescription) throws IOException {
@@ -94,22 +94,24 @@ public class PostController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
-    @RequestMapping("getpostsbynickname/{nickname}")
-    public ResponseEntity<PostsEntity[]> getPostsByNickname(@PathVariable(name = "nickname") String nickname) {
-        ResponseEntity<PostsEntity[]> posts = restTemplate.getForEntity("http://localhost:8080/api/posts/" +
-                "getpostsbyusernickname/" + nickname, PostsEntity[].class);
+    @RequestMapping("getpostsbynickname/{nickname}/{page}")
+    public ResponseEntity<PostsEntity[]> getPostsByNickname(@PathVariable(name = "nickname") String nickname,
+                                                            @PathVariable(name = "page") String page) {
+        String url = "http://localhost:8080/api/posts/" +
+                "getpostsbyusernickname/" + nickname + "/" + page;
+        ResponseEntity<PostsEntity[]> posts = restTemplate.getForEntity(url, PostsEntity[].class);
         if (posts.getBody() != null) {
             getImagesToPosts(posts.getBody());
         }
         return posts;
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
-    @RequestMapping("getpostsfromsubscriptions/{id}")
-    public ResponseEntity<PostsEntity[]> getPostsFromSubscriptions(@PathVariable(name = "id") String userId) {
+    @PreAuthorize("hasAnyRole('ROLE_Admin', 'ROLE_User')")
+    @RequestMapping("getpostsfromsubscriptions/{id}/{page}")
+    public ResponseEntity<PostsEntity[]> getPostsFromSubscriptions(@PathVariable(name = "id") String userId,
+                                                                   @PathVariable(name = "page") String page) {
         ResponseEntity<PostsEntity[]> posts = restTemplate.getForEntity("http://localhost:8080/api/posts/" +
-                "getpostsfromsubscriptions/" + Integer.parseInt(userId), PostsEntity[].class);
+                "getpostsfromsubscriptions/" + Integer.parseInt(userId) + "/" + page, PostsEntity[].class);
         if (posts.getBody() != null) {
             getImagesToPosts(posts.getBody());
         }

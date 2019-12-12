@@ -1,6 +1,7 @@
 .like {
     /* background: no-repeat url('/../assets/like.svg'); */
     display: inline-block;
+    cursor: pointer;
     height: 30px;
     width: 30px;
 }
@@ -8,6 +9,7 @@
 .dislike {
     /* background: no-repeat url('/../assets//dislikelike.svg'); */
     display: inline-block;
+    cursor: pointer;
     margin-left: 20px;
     height: 30px;
     width: 30px;

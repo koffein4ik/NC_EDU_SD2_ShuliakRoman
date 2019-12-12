@@ -3,21 +3,23 @@ package com.nc.backend.services;
 import com.nc.backend.model.HashtagsEntity;
 import com.nc.backend.model.PostsEntity;
 import com.nc.backend.model.UserIdPostDescription;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface PostService {
-    Iterable<PostsEntity> findAll();
+    List<PostsEntity> findAll(Integer page);
 
     Optional<PostsEntity> addNewPost(PostsEntity postsEntity);
 
     PostsEntity getPostEntity(UserIdPostDescription userIdPostDescription);
 
-    List<PostsEntity> getPostsByUserNickname(String nickname);
+    List<PostsEntity> getPostsByUserNickname(String nickname, Integer page);
 
-    List<PostsEntity> getPostsFromSubscriptions(Integer id);
+    List<PostsEntity> getPostsFromSubscriptions(Integer id, Integer page);
 
     @Transactional
     void deletePostById(Integer id);

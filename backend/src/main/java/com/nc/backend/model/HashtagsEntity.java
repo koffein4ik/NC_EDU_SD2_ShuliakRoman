@@ -15,7 +15,7 @@ public class HashtagsEntity {
 
     private Set<PostsEntity> posts = new HashSet<>();
 
-    @ManyToMany(mappedBy = "hashtags")
+    @ManyToMany(mappedBy = "hashtags", fetch = FetchType.LAZY)
     @JsonBackReference
     public Set<PostsEntity> getPosts() {
         return posts;

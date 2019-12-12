@@ -9,6 +9,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -30,6 +31,7 @@ public class CommentController {
         return restTemplate.exchange("http://localhost:8080/api/comments/getbypostid/" + postId, HttpMethod.GET, httpEntity, String.class).getBody();
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_Admin', 'ROLE_User')")
     @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("submitcomment")
     public String submitComment(@RequestBody SubmitComment submitComment) {

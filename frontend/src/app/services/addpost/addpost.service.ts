@@ -10,7 +10,8 @@ export class AddpostService {
   constructor(private httpClient: HttpClient) { }
 
   postFile(fileToUpload: File[], userId: number, postDescription: string) {
-    const endpoint = 'http://localhost:8081/api/posts/addnewpost';
+    // const endpoint = 'http://localhost:8081/api/posts/addnewpost';
+    const endpoint = '/api/posts/addnewpost/';
     const formData: FormData = new FormData();
     fileToUpload.forEach((file) => {
       formData.append('fileKey', file, file.name);

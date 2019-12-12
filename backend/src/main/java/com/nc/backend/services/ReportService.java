@@ -8,9 +8,9 @@ import java.util.List;
 public interface ReportService {
     void submitReport(ReportData reportData);
 
-    List<ReportsEntity> getReports();
+    List<ReportsEntity> getReports(Integer page);
 
     List<ReportsEntity> markReportAsChecked(Integer reportId);
 
-    List<ReportsEntity> getCheckedReports();
+    List<ReportsEntity> getCheckedReports(Integer page);
 }

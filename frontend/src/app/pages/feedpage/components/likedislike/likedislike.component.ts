@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { LikesdilikesService } from '../../../../services/likesdilikes.service';
 import { LikeDislike } from '../../../../models/likedislike';
+import { StorageUserModel } from '../../../../models/storageUserModel';
+import { StorageService } from '../../../../services/storage.service';
 
 @Component({
   selector: 'app-likedislike',
@@ -9,17 +11,18 @@ import { LikeDislike } from '../../../../models/likedislike';
 })
 export class LikedislikeComponent implements OnInit {
 
-  constructor(private likeDislikeService: LikesdilikesService) { }
+  constructor(private likeDislikeService: LikesdilikesService, private storageService: StorageService) { }
 
   private likeDislike: LikeDislike;
+  private currUser: StorageUserModel;
 
   private likeStyle = "/../assets/like.svg";
   private dislikeStyle = "/../assets/dislike.svg";
 
   likeClick() {
-    if (localStorage.getItem('userid') !== null) {
+    if (this.currUser !== null) {
       if(this.likeStyle == "/../assets/like.svg") {
-        this.likeDislikeService.setLikeDislike(this.postId, +localStorage.getItem('userid'), true).subscribe(
+        this.likeDislikeService.setLikeDislike(this.postId, this.currUser.id, true).subscribe(
           value => this.likeDislike = value
         );
         this.likeStyle = "/../assets/paintedlike.svg";
@@ -27,22 +30,22 @@ export class LikedislikeComponent implements OnInit {
       }
       else {
         this.likeStyle = "/../assets/like.svg";
-        if (localStorage.getItem('userid') !== null) {
-          this.likeDislikeService.removeLikeDislike(this.postId, +localStorage.getItem('userid')).subscribe(value => {
+        if (this.currUser !== null) {
+          this.likeDislikeService.removeLikeDislike(this.postId, this.currUser.id).subscribe(value => {
             this.likeDislike = value;
           })
         }
       }
     }
     else {
-      console.log("You have to authorize");
+      alert('You have to be authorized to put likes');
     }
   }
 
   dislikeClick() {
-    if (localStorage.getItem('userid') !== null) {
+    if (this.currUser !== null) {
       if(this.dislikeStyle == "/../assets/dislike.svg") {
-        this.likeDislikeService.setLikeDislike(this.postId, +localStorage.getItem('userid'), false).subscribe(
+        this.likeDislikeService.setLikeDislike(this.postId, this.currUser.id, false).subscribe(
           value =>  {
             this.likeDislike = value;
           }
@@ -52,12 +55,14 @@ export class LikedislikeComponent implements OnInit {
       }
       else {
         this.dislikeStyle = "/../assets/dislike.svg";
-        if (localStorage.getItem('userid') !== null) {
-          this.likeDislikeService.removeLikeDislike(this.postId, +localStorage.getItem('userid')).subscribe(value => {
+        if (this.currUser !== null) {
+          this.likeDislikeService.removeLikeDislike(this.postId, this.currUser.id).subscribe(value => {
             this.likeDislike = value;
           })
         }
       }
+    } else {
+      alert('You have to be authorized to put dislikes');
     }
   }
 
@@ -65,8 +70,9 @@ export class LikedislikeComponent implements OnInit {
 
   ngOnInit() {
     this.likeDislikeService.getLikesDislikesCountByPostId(this.postId).subscribe(value => this.likeDislike = value);
-    if (localStorage.getItem('userid') !== null) {
-      this.likeDislikeService.getUserReactionByPostId(this.postId, +localStorage.getItem('userid')).subscribe(value => {
+    this.currUser = this.storageService.getCurrentUser();
+    if (this.currUser !== null) {
+      this.likeDislikeService.getUserReactionByPostId(this.postId, this.currUser.id).subscribe(value => {
         if (value !== null) {
           if (value.type == 1) {
             this.likeStyle = "/../assets/paintedlike.svg";

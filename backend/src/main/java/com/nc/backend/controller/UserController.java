@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -20,7 +21,7 @@ public class UserController {
         return userService.findAll();
     }
 
-    @RequestMapping(path="/update", method= RequestMethod.GET)
+    @RequestMapping(path = "/update", method = RequestMethod.GET)
     public String updateUser(@RequestParam int id, @RequestParam String newDescription) {
         Optional<UserEntity> user = userService.findById(id);
         UserEntity user1 = user.get();
@@ -29,10 +30,9 @@ public class UserController {
         return "Updated successfully";
     }
 
-    @PostMapping(value = "/regnewuser", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "regnewuser")
     public UserEntity regNewUser(@RequestBody UserEntity userEntity) {
-        userService.regNewUser(userEntity);
-        return userEntity;
+        return userService.regNewUser(userEntity);
     }
 
     @PostMapping("updateuserinfo")
@@ -42,13 +42,12 @@ public class UserController {
 
     @RequestMapping(value = "/getuserbynickname/{nickname}", method = RequestMethod.GET)
     public UserEntity getUserByNickname(@PathVariable(name = "nickname") String nickname) {
-        Optional<UserEntity> userEntity = userService.findByNickname(nickname);
-        return userEntity.get();
+        return userService.findByNickname(nickname);
     }
 
-    @RequestMapping(value = "authorization", method = RequestMethod.POST)
-    public Optional authorize(@RequestBody LoginData userLoginData) {
-        return userService.authorize(userLoginData.getLogin(), userLoginData.getPassword());
+    @GetMapping("getallusers/{page}")
+    public List<UserEntity> getAllUsers(@PathVariable(name = "page") String page) {
+        return this.userService.getAllUsers(Integer.parseInt(page));
     }
 
     @GetMapping("blockuser/{userid}")

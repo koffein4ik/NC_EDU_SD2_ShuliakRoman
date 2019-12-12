@@ -5,6 +5,7 @@ import com.nc.fapi.model.ReportData;
 import com.nc.fapi.model.ReportsEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,7 +20,7 @@ public class ReportController {
     @Autowired
     RestTemplate restTemplate;
 
-    @CrossOrigin(origins = "http://localhost:4200")
+    @PreAuthorize("hasRole('ROLE_Admin')")
     @PostMapping("submitreport")
     public void submitReport(@RequestBody ReportData reportData) {
         HttpHeaders headers = new HttpHeaders();
@@ -29,11 +30,11 @@ public class ReportController {
                 httpEntityData, String.class);
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
-    @GetMapping("getreports")
-    public ResponseEntity<ReportsEntity[]> getReports() {
+    @PreAuthorize("hasRole('ROLE_Admin')")
+    @GetMapping("getreports/{page}")
+    public ResponseEntity<ReportsEntity[]> getReports(@PathVariable(name = "page") String page) {
         ResponseEntity<ReportsEntity[]> reports = this.restTemplate.
-                getForEntity("http://localhost:8080/api/reports/getreports", ReportsEntity[].class);
+                getForEntity("http://localhost:8080/api/reports/getreports/" + page, ReportsEntity[].class);
         if (reports.getBody() != null) {
             for (ReportsEntity report : reports.getBody()) {
                 PostsEntity post = report.getPost();
@@ -53,11 +54,11 @@ public class ReportController {
         return reports;
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
-    @GetMapping("getcheckedreports")
-    public ResponseEntity<ReportsEntity[]> getCheckedReports() {
+    @PreAuthorize("hasRole('ROLE_Admin')")
+    @GetMapping("getcheckedreports/{page}")
+    public ResponseEntity<ReportsEntity[]> getCheckedReports(@PathVariable(name = "page") String page) {
         ResponseEntity<ReportsEntity[]> reports = this.restTemplate.
-                getForEntity("http://localhost:8080/api/reports/getcheckedreports", ReportsEntity[].class);
+                getForEntity("http://localhost:8080/api/reports/getcheckedreports/" + page, ReportsEntity[].class);
         if (reports.getBody() != null) {
             for (ReportsEntity report : reports.getBody()) {
                 PostsEntity post = report.getPost();
@@ -77,7 +78,7 @@ public class ReportController {
         return reports;
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
+    @PreAuthorize("hasRole('ROLE_Admin')")
     @GetMapping("markreportaschecked/{reportid}")
     public ResponseEntity<ReportsEntity[]> markReportAsChecked(@PathVariable(name = "reportid") String reportId) {
         ResponseEntity<ReportsEntity[]> reports = this.restTemplate.

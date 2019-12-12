@@ -9,31 +9,31 @@ export class PostService {
 
   constructor(private http: HttpClient) { }
 
-  private userUrl = 'http://localhost:8081/api/posts/getallposts';
-  private hashtagUrl = 'http://localhost:8081/api/hashtags/getpostsbyhashtag/';
-  private nicknameUrl = 'http://localhost:8081/api/posts/getpostsbynickname/';
-  private postSubscriptionsUrl = 'http://localhost:8081/api/posts/getpostsfromsubscriptions/';
-  private deletePostUrl = 'http://localhost:8081/api/posts/deletepost/';
+  // private userUrl = 'http://localhost:8081/api/posts/getallposts/';
+  // private hashtagUrl = 'http://localhost:8081/api/hashtags/getpostsbyhashtag/';
+  // private nicknameUrl = 'http://localhost:8081/api/posts/getpostsbynickname/';
+  // private postSubscriptionsUrl = 'http://localhost:8081/api/posts/getpostsfromsubscriptions/';
+  // private deletePostUrl = 'http://localhost:8081/api/posts/deletepost/';
 
-  getPosts() {
-    return this.http.get<Post[]>(this.userUrl);
+  getPosts(page: number) {
+    return this.http.get<Post[]>('/api/posts/getallposts/' + page);
   }
 
-  getPostsByHashtagText(text: string) {
-    return this.http.get<Post[]>(this.hashtagUrl + text);
+  getPostsByHashtagText(text: string, page: number) {
+    return this.http.get<Post[]>('/api/hashtags/getpostsbyhashtag/' + text + "/" + page);
   }
 
-  getPostsByNickname(nickname: string) {
-    return this.http.get<Post[]>(this.nicknameUrl + nickname);
+  getPostsByNickname(nickname: string, page: number) {
+    return this.http.get<Post[]>('/api/posts/getpostsbynickname/' + nickname + "/" + page);
   }
 
   deletePostById(postId: number, userId: number) {
-     return this.http.delete<Post[]>(this.deletePostUrl + postId + "/" + userId);
+     return this.http.delete<Post[]>('/api/posts/deletepost/' + postId + "/" + userId);
   }
 
   //Сделать везде ник или id
-  getPostsFromSubscriptions(id: number) {
-    return this.http.get<Post[]>(this.postSubscriptionsUrl + id);
+  getPostsFromSubscriptions(id: number, page: number) {
+    return this.http.get<Post[]>('/api/posts/getpostsfromsubscriptions/' + id + "/" + page);
   }
 
 }

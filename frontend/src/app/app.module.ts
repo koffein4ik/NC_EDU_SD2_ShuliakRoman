@@ -1,12 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { IgxCarouselModule } from 'igniteui-angular';
 import { MatCarouselModule } from '@ngmodule/material-carousel';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatTableModule } from '@angular/material/table';
  
 import { AppComponent } from './app.component';
 import { MainpageComponent } from './components/mainpage/mainpage.component';
@@ -29,6 +30,9 @@ import { MyfeedComponent } from './pages/myfeed/myfeed.component';
 import { ReportdialogComponent } from './pages/components/reportdialog/reportdialog.component';
 import { ReportspageComponent } from './pages/reportspage/reportspage.component';
 import { EdituserinfopageComponent } from './pages/edituserinfopage/edituserinfopage.component';
+import { AlluserspageComponent } from './pages/alluserspage/alluserspage.component';
+import { APIInterceptor } from "./interceptors/api-interceptor";
+import { UserService } from "./services/user.service";
 
 @NgModule({
   declarations: [
@@ -50,7 +54,8 @@ import { EdituserinfopageComponent } from './pages/edituserinfopage/edituserinfo
     MyfeedComponent,
     ReportdialogComponent,
     ReportspageComponent,
-    EdituserinfopageComponent
+    EdituserinfopageComponent,
+    AlluserspageComponent
   ],
   imports: [
     BrowserModule,
@@ -62,12 +67,17 @@ import { EdituserinfopageComponent } from './pages/edituserinfopage/edituserinfo
     MatCarouselModule,
     MatInputModule,
     MatButtonModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTableModule
   ],
   entryComponents: [
     ReportdialogComponent
   ],
-  providers: [],
+  providers: [UserService, APIInterceptor, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: APIInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -10,12 +10,12 @@ export class SubscriptionsService {
 
   constructor(private http: HttpClient) {}
 
-  getUserSubscriptionsDataUrl = "http://localhost:8081/api/subscriptions/getsubscriptionsdata/";
-  subscribeUrl = "http://localhost:8081/api/subscriptions/subscribe/";
-  unsubscribeUrl = "http://localhost:8081/api/subscriptions/unsubscribe/";
+  // getUserSubscriptionsDataUrl = "http://localhost:8081/api/subscriptions/getsubscriptionsdata/";
+  // subscribeUrl = "http://localhost:8081/api/subscriptions/subscribe/";
+  // unsubscribeUrl = "http://localhost:8081/api/subscriptions/unsubscribe/";
   
   getUserSubscriptions(id: number, currUserId: number) {
-    return this.http.get<SubscriptionData>(this.getUserSubscriptionsDataUrl + id + "/" + currUserId);
+    return this.http.get<SubscriptionData>("/api/subscriptions/getsubscriptionsdata/" + id + "/" + currUserId);
   }
 
   subscribe(subscriberId: number, subscribeTo: number) {
@@ -23,7 +23,7 @@ export class SubscriptionsService {
       subscriberId: subscriberId,
       subscribedToId: subscribeTo
     }
-    return this.http.post<SubscriptionData>(this.subscribeUrl, data);
+    return this.http.post<SubscriptionData>("/api/subscriptions/subscribe/", data);
   }
 
   unsubscribe(subscriberId: number, subscribeTo: number) {
@@ -36,7 +36,7 @@ export class SubscriptionsService {
         subscribedToId: subscribeTo
       },
     };
-     return this.http.delete<SubscriptionData>(this.unsubscribeUrl, options);
+     return this.http.delete<SubscriptionData>("/api/subscriptions/unsubscribe/", options);
   }
   
 }

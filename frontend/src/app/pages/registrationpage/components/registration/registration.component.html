@@ -17,21 +17,23 @@
     <input type="text" placeholder="Last name" name="lastname" ngModel required>
 
     <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" ngModel required>
+    <input type="password" placeholder="Enter Password" name="psw" [(ngModel)]="psw" required>
 
     <label for="psw-repeat"><b>Repeat Password</b></label>
-    <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
-
+    <input type="password" placeholder="Repeat Password" name="psw-repeat" [(ngModel)]="repeatPsw" required>
+    <p *ngIf="psw && (psw !== repeatPsw)" class="message">Passwords should be the same</p>
     <hr>
 
-    <!-- <label [bsConfig]="dpConfig">Enter your date of birth</label> -->
-    <!-- <igx-date-picker (onSelection)="onCalendarValueSelect($event)"></igx-date-picker> -->
-    
-    <!-- <button type="button" class="btn btn-primary">Primary</button> -->
-    <button type="submit" [disabled]="!regForm.valid" class="registerbtn">Register</button>
+    <p *ngIf="!regForm.valid || (psw !== repeatPsw)" class="message">Please, fullfill all the fields to continue</p>
+    <button type="submit" [disabled]="!regForm.valid || (psw !== repeatPsw)" class="registerbtn">Register</button>
   </div>
 
   <div class="container signin">
-    <p>Already have an account? <a href="#">Sign in</a>.</p>
+    <p>Already have an account? <a href="/login">Sign in</a>.</p>
   </div>
 </form>
+
+<div *ngIf="submitted && user" class="reg-success">
+  <p>Registerd {{user.nickname}} successfully</p>
+  <p>Now you can <a href="/login">Sign in</a>.</p>
+</div>

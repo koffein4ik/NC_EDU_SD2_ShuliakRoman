@@ -22,9 +22,10 @@ public class HashtagController {
     @Autowired
     HashtagService hashtagService;
 
-    @RequestMapping("getpostsbyhashtag/{hashtag}")
-    public List<PostsEntity> getPostsByHashtagText(@PathVariable(name = "hashtag") String hashtag) {
+    @RequestMapping("getpostsbyhashtag/{hashtag}/{page}")
+    public List<PostsEntity> getPostsByHashtagText(@PathVariable(name = "hashtag") String hashtag,
+                                                   @PathVariable(name = "page") String page) {
         System.out.println(hashtag);
-        return hashtagService.getPostsByHashtagText(hashtag);
+        return hashtagService.getPostsByHashtagText(hashtag, Integer.parseInt(page));
     }
 }

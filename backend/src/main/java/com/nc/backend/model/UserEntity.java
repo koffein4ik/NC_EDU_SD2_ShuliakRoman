@@ -15,6 +15,7 @@ public class UserEntity {
     private String role;
     private String profileDescription;
     private String password;
+    private String email;
     private UserStatus status;
     private Set<UserEntity> subscribers = new HashSet<>();
     //private Set<UserEntity> subscribedTo;
@@ -38,6 +39,7 @@ public class UserEntity {
 //    }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     public int getId() {
         return id;
@@ -65,6 +67,16 @@ public class UserEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Basic
+    @Column(name = "email")
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Basic

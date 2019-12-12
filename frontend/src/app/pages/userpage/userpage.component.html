@@ -1,25 +1,32 @@
-<div *ngIf="user !== undefined" class="userpage">
-    <div class="user-header">
-        <div class="user-image">
-            <img [src]="userAvatar" class="avatar">
+<div (scroll)="scrollHandler($event)">
+    <div *ngIf="user !== undefined" class="userpage">
+        <div class="user-header">
+            <div class="user-image">
+                <img [src]="userAvatar" class="avatar">
+            </div>
+            <div class="user-info">
+                <p class="nickname">{{user.nickname}}</p>
+                <p>{{user.name}}</p>
+                <p>{{user.profileDescription}}</p>          
+                <button *ngIf="currUser && user && (currUser.id == user.id)" mat-raised-button color="primary" class="sub-btn" routerLink="/edituserinfo">Edit info</button>
+                <button *ngIf="currUser && user && (currUser.id == user.id)" mat-raised-button color="primary" class="sub-btn" routerLink="/addpost">Add post</button>    
+            </div>
         </div>
-        <div class="user-info">
-            <p>{{user | json}}</p>
-            <p *ngIf="subscriptionData">{{subscriptionData.subscribers}}</p>
-            <p *ngIf="subscriptionData">{{subscriptionData.subscriptions}}</p>
-            <div *ngIf="(currUser !== 0) && subscriptionData">
-                <button *ngIf="!subscriptionData.isCurrUserSubscribed" mat-raised-button color="primary" (click)="subscribe()">Subscribe</button>
-                <button *ngIf="subscriptionData.isCurrUserSubscribed" mat-raised-button color="primary" (click)="unsubscribe()">Unsubscribe</button>
+        <div class="user-subscriptions">
+            <p *ngIf="subscriptionData" class="subinfo">Followers {{subscriptionData.subscribers}}</p>
+            <p *ngIf="subscriptionData" class="subinfo">Following {{subscriptionData.subscriptions}}</p>
+            <div *ngIf="currUser && subscriptionData">
+                <button *ngIf="!subscriptionData.isCurrUserSubscribed && (currUser.id != user.id)" mat-raised-button color="primary" class="sub-btn" (click)="subscribe()">Subscribe</button>
+                <button *ngIf="subscriptionData.isCurrUserSubscribed && (currUser.id != user.id)" mat-raised-button color="primary" class="sub-btn" (click)="unsubscribe()">Unsubscribe</button>
             </div>
         </div>
     </div>
-</div>
-<button *ngIf="(currUser !== 0) && (user) && (currUser == user.id)" mat-raised-button color="primary" routerLink="/edituserinfo">Edit info</button>
-<div class="posts">
-    <p *ngFor="let post of posts">
-        <app-post (onDelete)="delete($event)" [post]="post"></app-post>
-    </p>
-</div>
-<div *ngIf="user === undefined" class="nosuchuser">
-    <p>No such user</p>
+    <div class="posts">
+        <p *ngFor="let post of posts">
+            <app-post (onDelete)="delete($event)" [post]="post"></app-post>
+        </p>
+    </div> 
+    <div *ngIf="userLoaded && !user" class="nosuchuser">
+        <p>No such user</p>
+    </div>
 </div>

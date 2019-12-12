@@ -1,0 +1,18 @@
+table {
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 10px;
+}
+
+.action-button {
+    width: 100%;
+}
+
+.mat-column-action {
+    width: 150px;
+}
+
+.mat-column-status {
+    width: 100px;
+}

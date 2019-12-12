@@ -14,15 +14,9 @@
 
         <button type="submit" [disabled]="!loginForm.valid" class="submit-btn" mat-raised-button color="primary">Submit</button>
 
-        <div *ngIf="loginError == true" class="loginError">
+        <div *ngIf="loginError == true" class="login-error">
           <p>Wrong login or password</p>
         </div>
-
-      <!-- <label for="nickname"><b>Nickname</b></label>
-      <input type="text" placeholder="Enter Nickname" name="nickname" ngModel required>
-  
-      <label for="psw"><b>Password</b></label>
-      <input type="password" placeholder="Enter Password" name="psw" ngModel required> -->
     </div>
 </form>
   

@@ -5,9 +5,12 @@ import { IgxCarouselModule } from 'igniteui-angular';
 import { MatCarouselSlide, MatCarouselSlideComponent } from '@ngmodule/material-carousel';
 import { MatInputModule } from '@angular/material/input';
 import { ReportdialogComponent } from '../../../components/reportdialog/reportdialog.component';
+
 import { MatDialog } from '@angular/material';
 import { Report } from '../../../../models/report';
 import { PostService } from '../../../../services/postservice/post.service';
+import { StorageService } from '../../../../services/storage.service';
+import { StorageUserModel } from '../../../../models/storageUserModel';
 
 @Component({
   selector: 'app-post',
@@ -19,11 +22,10 @@ export class PostComponent implements OnInit {
   @Input() post: Post;
   @Output() onDelete = new EventEmitter<any>();
 
-  currUserId: number;
+  constructor(public dialog: MatDialog, private postService: PostService, private storageService: StorageService) { }
 
-  constructor(public dialog: MatDialog, private postService: PostService) { }
-
-  private avatarUrl = "http://localhost:8081/api/users/getuseravatar/";
+  private avatarUrl = "/api/users/getuseravatar/";
+  private user: StorageUserModel;
 
   replaceHashtagsWithLinks() {
     this.post.description = "<p>" + this.post.description + "</p>";
@@ -38,11 +40,11 @@ export class PostComponent implements OnInit {
   }
 
   reportClick() {
-    if (localStorage.getItem('userid') !== undefined) {
-      console.log("report");
+    let currUser = this.storageService.getCurrentUser();
+    if (currUser) {
       let report: Report = new Report();
       report.postId = this.post.postId;
-      report.senderUserId = this.currUserId;
+      report.senderUserId =currUser.id;
       report.reportedUserId = this.post.user.id;
       const dialogRef = this.dialog.open(ReportdialogComponent, {
         width: '40%',
@@ -50,7 +52,6 @@ export class PostComponent implements OnInit {
       });
 
       dialogRef.afterClosed().subscribe(result => {
-        console.log('The dialog was closed');
       });
     } else {
       window.confirm("You have to be authorized to send reports");
@@ -66,12 +67,10 @@ export class PostComponent implements OnInit {
 
   ngOnInit() {
     this.replaceHashtagsWithLinks();
-    if (localStorage.getItem('userId') !== undefined) {
-      this.currUserId = +localStorage.getItem('userid');
-    }
+    this.user = this.storageService.getCurrentUser();
     this.avatarUrl += this.post.user.id;
     for(var i = 0; i < this.post.photoURIs.length; i++) {
-      this.post.photoURIs[i] = 'http://localhost:8081/api/posts/images/' + this.post.user.id + '/' + this.post.postId + '/' +
+      this.post.photoURIs[i] = '/api/posts/images/' + this.post.user.id + '/' + this.post.postId + '/' +
         this.post.photoURIs[i];
     }
   }

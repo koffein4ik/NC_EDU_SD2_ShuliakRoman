@@ -26,4 +26,6 @@ public interface LikeDislikeRepository extends PagingAndSortingRepository<Likedi
     @Query(value = "Delete from LikedislikeEntity ld where ld.post.postId= :postId and ld.user.id = :userId")
     void removeLikeDislike(@Param("postId") Integer postId, @Param("userId") Integer userId);
     Iterable<LikedislikeEntity> findAllByPost(PostsEntity post);
+
+    void removeAllByPost_PostId(Integer postId);
 }

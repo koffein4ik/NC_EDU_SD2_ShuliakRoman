@@ -13,6 +13,7 @@
       <mapping class="com.nc.backend.model.PosthathtagsEntity"/>
       <mapping class="com.nc.backend.model.ReportsEntity"/>
       <mapping class="com.nc.backend.model.UserEntity"/>
+<!--      <mapping class="com.nc.backend.model.UserSubscriptionsEntity"/>-->
       <!-- <property name="connection.username"/> -->
     <!-- <property name="connection.password"/> -->
 

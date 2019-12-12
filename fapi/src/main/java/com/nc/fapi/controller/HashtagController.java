@@ -21,11 +21,11 @@ public class HashtagController {
     @Autowired
     RestTemplate restTemplate;
 
-    @CrossOrigin(origins = "http://localhost:4200")
-    @RequestMapping("getpostsbyhashtag/{hashtag}")
-    public ResponseEntity<PostsEntity[]> getPostsByHashtagText(@PathVariable(name = "hashtag") String hashtag) {
+    @RequestMapping("getpostsbyhashtag/{hashtag}/{page}")
+    public ResponseEntity<PostsEntity[]> getPostsByHashtagText(@PathVariable(name = "hashtag") String hashtag,
+                                                               @PathVariable(name = "page") String page) {
         ResponseEntity<PostsEntity[]> posts = restTemplate.getForEntity("http://localhost:8080/api/hashtags/" +
-                "getpostsbyhashtag/" + hashtag, PostsEntity[].class);
+                "getpostsbyhashtag/" + hashtag + "/" + page, PostsEntity[].class);
         if (posts.getBody() != null) {
             for(PostsEntity post : posts.getBody()) {
                 String folderpath = "src/main/resources/userphotos/users/" + post.getUser().getId() + "/posts/" + post.getPostId();

@@ -7,9 +7,29 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "posthathtags", schema = "photosquare")
+@Table(name = "posthashtags", schema = "photosquare")
 public class PosthathtagsEntity {
     private int posthashtagId;
+    private int postId;
+    private int hashtagId;
+
+    @Column(name = "post_id")
+    public int getPostId() {
+        return postId;
+    }
+
+    public void setPostId(int postId) {
+        this.postId = postId;
+    }
+
+    @Column(name = "hashtag_id")
+    public int getHashtagId() {
+        return hashtagId;
+    }
+
+    public void setHashtagId(int hashtagId) {
+        this.hashtagId = hashtagId;
+    }
 
     @Id
     @Column(name = "posthashtag_id")

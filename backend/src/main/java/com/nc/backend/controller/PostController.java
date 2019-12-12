@@ -20,9 +20,9 @@ public class PostController {
     @Autowired
     PostService postService;
 
-    @GetMapping("show")
-    Iterable<PostsEntity> getAllPosts() {
-        return postService.findAll();
+    @GetMapping("show/{page}")
+    Iterable<PostsEntity> getAllPosts(@PathVariable(name = "page") String page) {
+        return postService.findAll(Integer.parseInt(page));
     }
 
     @PostMapping("addnewpost")
@@ -31,9 +31,10 @@ public class PostController {
         return postsEntity.orElseGet(PostsEntity::new);
     }
 
-    @RequestMapping("getpostsbyusernickname/{nickname}")
-    public List<PostsEntity> getPostsByUserNickname(@PathVariable(name = "nickname") String nickname) {
-        return postService.getPostsByUserNickname(nickname);
+    @RequestMapping("getpostsbyusernickname/{nickname}/{page}")
+    public List<PostsEntity> getPostsByUserNickname(@PathVariable(name = "nickname") String nickname,
+                                                    @PathVariable(name = "page") String page) {
+        return postService.getPostsByUserNickname(nickname, Integer.parseInt(page));
     }
 
     @DeleteMapping("deletepost/{postid}")
@@ -41,9 +42,10 @@ public class PostController {
         postService.deletePostById(Integer.parseInt(postId));
     }
 
-    @RequestMapping("getpostsfromsubscriptions/{id}")
-    public List<PostsEntity> getPostsByUserSubscriptions(@PathVariable(name = "id") String id) {
-        return postService.getPostsFromSubscriptions(Integer.parseInt(id));
+    @RequestMapping("getpostsfromsubscriptions/{id}/{page}")
+    public List<PostsEntity> getPostsByUserSubscriptions(@PathVariable(name = "id") String id,
+                                                         @PathVariable(name = "page") String page) {
+        return postService.getPostsFromSubscriptions(Integer.parseInt(id), Integer.parseInt(page));
     }
 
 }

@@ -1,8 +1,10 @@
 package com.nc.backend.services;
 
 import com.nc.backend.model.UserEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -12,11 +14,13 @@ public interface UserService {
 
     Optional<UserEntity> authorize(String nickname, String password);
 
-    String regNewUser(UserEntity userEntity);
+    UserEntity regNewUser(UserEntity userEntity);
+
+    List<UserEntity> getAllUsers(Integer page);
 
     void save(UserEntity u);
 
-    Optional<UserEntity> findByNickname(String nickname);
+    UserEntity findByNickname(String nickname);
 
     void banUser(Integer userId);
 

@@ -22,7 +22,6 @@
             </div>
     </form>
 </div>
-<p *ngIf="updated" class="updated">Updated successfully</p>
 
 <div class="updateavatar">
     <form #updateAvatarForm = "ngForm" class = "updateavatar-form" (ngSubmit) = "onAvatarClickSubmit()">
@@ -37,8 +36,10 @@
                    (change)="handleFileInput($event.target.files)">
         </div>
           
-          <button type="submit" class="updatebtn">Upload</button>
+        <button type="submit" mat-raised-button color="primary" >Upload</button>
         </div>
       
     </form>
 </div>
+
+<p *ngIf="updated" class="updated">Updated successfully</p>

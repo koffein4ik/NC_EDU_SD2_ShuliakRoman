@@ -5,6 +5,7 @@ import java.util.Objects;
 public class UserEntity {
     private int id;
     private String nickname;
+    private String email;
     private String name;
     private String surname;
     private String role;
@@ -26,6 +27,14 @@ public class UserEntity {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getName() {

@@ -4,6 +4,8 @@ import { IgxDatePickerComponent } from 'igniteui-angular';
 import { ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { UserService } from '../../../../services/user.service';
+import { User } from '../../../../models/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registration',
@@ -12,7 +14,13 @@ import { UserService } from '../../../../services/user.service';
 })
 export class RegistrationComponent implements OnInit {
 
-  constructor(private location: Location, private userService: UserService) { }
+  user: User;
+  submitted = false;
+  regError = false;
+  psw = "";
+  repeatPsw = "";
+
+  constructor(private location: Location, private userService: UserService, private router: Router) { }
 
   goBack(): void {
     this.location.back();
@@ -27,7 +35,15 @@ export class RegistrationComponent implements OnInit {
 
   onClickSubmit(formData): void {
     this.userService.regUser(formData.nickname, formData.email, formData.firstname, 
-      formData.lastname, formData.psw).subscribe(response => console.log(response));
+      formData.lastname, formData.psw).subscribe(response => {
+        if (response.id) {
+          this.user = response;
+          this.submitted = true;
+          // this.router.navigate(['/login']);
+        } else {
+          alert("User with such nickname or e-mail already exists.");
+        }
+      });
   }
 
 }

@@ -20,14 +20,14 @@ public class ReportController {
         this.reportService.submitReport(reportData);
     }
 
-    @GetMapping(value = "getreports")
-    public List<ReportsEntity> getReports() {
-        return this.reportService.getReports();
+    @GetMapping(value = "getreports/{page}")
+    public List<ReportsEntity> getReports(@PathVariable(name = "page") String page) {
+        return this.reportService.getReports(Integer.parseInt(page));
     }
 
-    @GetMapping(value = "getcheckedreports")
-    public List<ReportsEntity> getCheckedReports() {
-        return this.reportService.getCheckedReports();
+    @GetMapping(value = "getcheckedreports/{page}")
+    public List<ReportsEntity> getCheckedReports(@PathVariable(name = "page") String page) {
+        return this.reportService.getCheckedReports(Integer.parseInt(page));
     }
 
     @GetMapping("markaschecked/{reportid}")

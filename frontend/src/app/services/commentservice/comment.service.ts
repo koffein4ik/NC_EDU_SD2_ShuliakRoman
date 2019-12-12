@@ -10,11 +10,11 @@ export class CommentService {
 
   constructor(private http: HttpClient) { }
 
-  private apiUrl = 'http://localhost:8081/api/comments/getcommentsbypostid/';
-  private submitUrl = 'http://localhost:8081/api/comments/submitcomment';
+  // private apiUrl = 'http://localhost:8081/api/comments/getcommentsbypostid/';
+  // private submitUrl = 'http://localhost:8081/api/comments/submitcomment';
 
   getCommentsByPostId(postId: number): Observable<Comment[]> {
-    return this.http.get<Comment[]>(this.apiUrl + postId);
+    return this.http.get<Comment[]>('/api/comments/getcommentsbypostid/' + postId);
   }
 
   submitComment(postId: number, userId: number, text: string): Observable<Comment[]> {
@@ -25,6 +25,6 @@ export class CommentService {
       text: text
     }
     console.log(SubmitComment);
-    return this.http.post<Comment[]>(this.submitUrl, SubmitComment);
+    return this.http.post<Comment[]>('/api/comments/submitcomment/', SubmitComment);
   }
 }

@@ -4,6 +4,7 @@ import com.nc.backend.model.*;
 import com.nc.backend.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +28,16 @@ public class PostServiceImpl implements PostService {
     @Autowired
     ReportRepository reportRepository;
 
+    @Autowired
+    LikeDislikeRepository likeDislikeRepository;
+
+    @Autowired
+    CommentRepository commentRepository;
+
     @Override
-    public Iterable<PostsEntity> findAll() {
-        return postRepository.findAll();
+    public List<PostsEntity> findAll(Integer page) {
+        Pageable currPage = PageRequest.of(page, 1);
+        return postRepository.findAll(currPage).getContent();
     }
 
     @Override
@@ -70,26 +78,23 @@ public class PostServiceImpl implements PostService {
                         hashtagsEntity = hashtagFromDb.get();
                         postsEntity.getHashtags().add(hashtagsEntity);
                     } else {
-                        System.out.println("No hashtag with such id");
+//                        System.out.println("No hashtag with such id");
                     }
                 }
-                System.out.println(postsEntity.getHashtags().toArray().toString());
-                System.out.println(hashtag);
+//                System.out.println(postsEntity.getHashtags().toArray().toString());
+//                System.out.println(hashtag);
             }
         }
         return postsEntity;
     }
 
     @Override
-    public List<PostsEntity> getPostsByUserNickname(String nickname) {
-//        userRepository.findAll(PageRequest.of(page,size, Sort.Direction.DESC,))
+    public List<PostsEntity> getPostsByUserNickname(String nickname, Integer page) {
+        Pageable onepost = PageRequest.of(page, 1);
         Optional<UserEntity> user = userRepository.findByNickname(nickname);
         if (user.isPresent()) {
-            Iterable<PostsEntity> posts = postRepository.findAllByUserId(user.get().getId());
-            Iterator<PostsEntity> iterator = posts.iterator();
-            List<PostsEntity> postsList = new ArrayList<>();
-            iterator.forEachRemaining(postsList::add);
-            return postsList;
+            List<PostsEntity> posts = postRepository.findAllByUserId(user.get().getId(), onepost);
+            return posts;
         }
         else {
             return new ArrayList<>();
@@ -97,14 +102,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostsEntity> getPostsFromSubscriptions(Integer id) {
-        List<UserEntity> userSubscriptions = userSubscriptionsService.getAllSubscriptionsBySubscriberId(id);
-        List<PostsEntity> posts = new ArrayList<>();
-        for (UserEntity u : userSubscriptions) {
-            Iterable<PostsEntity> postsFromUser = postRepository.findAllByUserId(u.getId());
-            postsFromUser.forEach(posts::add);
-        }
-        return posts;
+    public List<PostsEntity> getPostsFromSubscriptions(Integer id, Integer page) {
+        Pageable pageable = PageRequest.of(page, 2);
+        return postRepository.findAllFromSubscriptions(id, pageable);
     }
 
     @Override
@@ -113,9 +113,11 @@ public class PostServiceImpl implements PostService {
         if (currPost.isPresent()) {
             currPost.get().setHashtags(new HashSet<>());
             postRepository.save(currPost.get());
+            commentRepository.deleteAll(commentRepository.findAllByPost(currPost.get()));
+            likeDislikeRepository.deleteAll(likeDislikeRepository.findAllByPost(currPost.get()));
+            reportRepository.deleteReportsByPostId(id);
+            postRepository.deleteByPostId(id);
         }
-        reportRepository.deleteReportsByPostId(id);
-        postRepository.deleteByPostId(id);
     }
 
 }

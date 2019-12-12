@@ -2,10 +2,14 @@ package com.nc.backend.services;
 
 import com.nc.backend.model.UserEntity;
 import com.nc.backend.model.UserStatus;
+import com.nc.backend.repositories.HashtagRepository;
 import com.nc.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service("userService")
@@ -19,9 +23,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String regNewUser(UserEntity userEntity) {
-        userRepository.save(userEntity);
-        return null;
+    public UserEntity regNewUser(UserEntity userEntity) {
+        if (!this.userRepository.findByNickname(userEntity.getNickname()).isPresent() &&
+                !this.userRepository.findByEmail(userEntity.getEmail()).isPresent()) {
+            return userRepository.save(userEntity);
+        }
+        return new UserEntity();
+    }
+
+    @Override
+    public List<UserEntity> getAllUsers(Integer page) {
+        int size = 20;
+        Pageable pageable = PageRequest.of(page, size);
+        return userRepository.findByRole("User", pageable);
     }
 
     @Override
@@ -45,8 +59,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<UserEntity> findByNickname(String nickname) {
-        return userRepository.findByNickname(nickname);
+    public UserEntity findByNickname(String nickname) {
+        Optional<UserEntity> userEntity = userRepository.findByNickname(nickname);
+        if (userEntity.isPresent()) {
+            return userEntity.get();
+        }
+        return new UserEntity();
     }
 
     @Override

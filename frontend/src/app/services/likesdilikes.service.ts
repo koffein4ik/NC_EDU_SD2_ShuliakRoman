@@ -11,13 +11,13 @@ export class LikesdilikesService {
 
   constructor(private http: HttpClient) { }
 
-  private userUrl = 'http://localhost:8081/api/likesdislikes/getlikesdislikescountbypostid/';
-  private putLikeDislikeUrl = 'http://localhost:8081/api/likesdislikes/putlikedislike/';
-  private getUserReactionUrl = 'http://localhost:8081/api/likesdislikes/getuserreaction';
-  private removeUserReactionUrl = 'http://localhost:8081/api/likesdislikes/removeuserreaction';
+  // private userUrl = 'http://localhost:8081/api/likesdislikes/getlikesdislikescountbypostid/';
+  // private putLikeDislikeUrl = 'http://localhost:8081/api/likesdislikes/putlikedislike/';
+  // private getUserReactionUrl = 'http://localhost:8081/api/likesdislikes/getuserreaction';
+  // private removeUserReactionUrl = 'http://localhost:8081/api/likesdislikes/removeuserreaction';
 
   getLikesDislikesCountByPostId(postId: number): Observable<LikeDislike> {
-    return this.http.get<LikeDislike>(this.userUrl + postId);
+    return this.http.get<LikeDislike>('/api/likesdislikes/getlikesdislikescountbypostid/' + postId);
   }
 
   setLikeDislike(postId: number, userId: number, type: boolean): Observable<LikeDislike> {
@@ -27,7 +27,7 @@ export class LikesdilikesService {
       "type": type
     };
     console.log(LikeDislikeData);
-    return this.http.put<LikeDislike>(this.putLikeDislikeUrl, LikeDislikeData);
+    return this.http.put<LikeDislike>('/api/likesdislikes/putlikedislike', LikeDislikeData);
   }
 
   removeLikeDislike(postId: number, userId: number): Observable<LikeDislike> {
@@ -42,7 +42,7 @@ export class LikesdilikesService {
         userId: userId
       },
     };
-     return this.http.delete<LikeDislike>(this.removeUserReactionUrl, options);
+     return this.http.delete<LikeDislike>('/api/likesdislikes/removeuserreaction/', options);
    }
 
   getUserReactionByPostId(postId: number, userId: number): Observable<UserReaction> {
@@ -50,6 +50,6 @@ export class LikesdilikesService {
       "postId": postId,
       "userId": userId
     }
-    return this.http.post<UserReaction>(this.getUserReactionUrl, data);
+    return this.http.post<UserReaction>('/api/likesdislikes/getuserreaction/', data);
   }
 }

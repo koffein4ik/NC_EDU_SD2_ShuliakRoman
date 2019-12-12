@@ -2,11 +2,13 @@ package com.nc.backend.services;
 
 import com.nc.backend.model.*;
 import com.nc.backend.repositories.ReportRepository;
+import com.nc.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +18,9 @@ public class ReportServiceImpl implements ReportService {
 
     @Autowired
     ReportRepository reportRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public void submitReport(ReportData reportData) {
@@ -37,19 +42,19 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<ReportsEntity> getReports() {
-        Iterable<ReportsEntity> reports = reportRepository.getAllByStatus(ReportStatus.unchecked);
-        List<ReportsEntity> reportsList = new ArrayList<>();
-        reports.iterator().forEachRemaining(reportsList::add);
-        return reportsList;
+    public List<ReportsEntity> getReports(Integer page) {
+        int size = 2;
+        Pageable pageable = PageRequest.of(page, size);
+        List<ReportsEntity> reports = reportRepository.getAllByStatus(ReportStatus.unchecked, pageable);
+        return reports;
     }
 
     @Override
-    public List<ReportsEntity> getCheckedReports() {
-        Iterable<ReportsEntity> reports = reportRepository.getAllByStatus(ReportStatus.checked);
-        List<ReportsEntity> reportsList = new ArrayList<>();
-        reports.iterator().forEachRemaining(reportsList::add);
-        return reportsList;
+    public List<ReportsEntity> getCheckedReports(Integer page) {
+        int size = 2;
+        Pageable pageable = PageRequest.of(page, size);
+        List<ReportsEntity> reports = reportRepository.getAllByStatus(ReportStatus.checked, pageable);
+        return reports;
     }
 
     @Override
@@ -60,6 +65,6 @@ public class ReportServiceImpl implements ReportService {
             markedReport.setStatus(ReportStatus.checked);
             reportRepository.save(markedReport);
         }
-        return getReports();
+        return getReports(0);
     }
 }

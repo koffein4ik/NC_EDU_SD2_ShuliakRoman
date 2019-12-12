@@ -5,8 +5,8 @@
             <p routerLink="{{'/user/' + post.user.nickname}}" class="nickname">{{post.user.nickname}}</p>
         </div>
         <div>
-            <i class="material-icons report" (click)="reportClick()">report</i>
-            <i *ngIf="currUserId == post.user.id" (click)="deleteClick()" class="material-icons remove">remove_circle_outline</i>
+            <i *ngIf="storageService.getCurrentUser()" class="material-icons report" (click)="reportClick()">report</i>
+            <i *ngIf="user && user.id == post.user.id" (click)="deleteClick()" class="material-icons remove">remove_circle_outline</i>
         </div>
     </div>
     <mat-carousel [hideArrows]="false" [autoplay]="false" [proportion]="100" [hideIndicators]="false">
