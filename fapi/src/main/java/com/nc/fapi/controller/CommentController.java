@@ -19,27 +19,17 @@ import java.util.Arrays;
 @RequestMapping("api/comments")
 public class CommentController {
 
-    @Autowired
-    RestTemplate restTemplate;
+    private final RestTemplate restTemplate = new RestTemplate();
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping("getcommentsbypostid/{postId}")
-    public String getLikesDislikesByPostId(@PathVariable(name = "postId") String postId) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        HttpEntity<String> httpEntity = new HttpEntity<>(headers);
-        return restTemplate.exchange("http://localhost:8080/api/comments/getbypostid/" + postId, HttpMethod.GET, httpEntity, String.class).getBody();
+    public CommentEntity[] getCommentsByPostId(@PathVariable(name = "postId") String postId) {
+        return restTemplate.getForObject("http://localhost:8080/api/comments/getbypostid/" + postId, CommentEntity[].class);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_Admin', 'ROLE_User')")
-    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("submitcomment")
-    public String submitComment(@RequestBody SubmitComment submitComment) {
-        System.out.println(submitComment.getPostId());
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        HttpEntity<SubmitComment> httpEntity = new HttpEntity<>(submitComment, headers);
-        return restTemplate.exchange("http://localhost:8080/api/comments/submitcomment", HttpMethod.POST, httpEntity, String.class).getBody();
+    public CommentEntity[] submitComment(@RequestBody SubmitComment submitComment) {
+        return restTemplate.postForObject("http://localhost:8080/api/comments/submitcomment", submitComment, CommentEntity[].class);
     }
 
 }

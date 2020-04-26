@@ -16,11 +16,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/token")
 public class AuthenticationController {
 
-    @Autowired
-    AuthenticationManager authenticationManager;
+    public AuthenticationController(AuthenticationManager authenticationManager, TokenProvider tokenProvider) {
+        this.authenticationManager = authenticationManager;
+        this.tokenProvider = tokenProvider;
+    }
 
-    @Autowired
-    TokenProvider tokenProvider;
+    private AuthenticationManager authenticationManager;
+
+    private TokenProvider tokenProvider;
 
     @RequestMapping(value = "/generate-token", method = RequestMethod.POST)
     public ResponseEntity register(@RequestBody LoginData loginData) {

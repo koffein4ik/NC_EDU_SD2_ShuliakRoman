@@ -15,8 +15,7 @@ import java.util.List;
 @RequestMapping("api/subscriptions")
 public class UserSubscriptions {
 
-    @Autowired
-    RestTemplate restTemplate;
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @RequestMapping("getsubscribersbyuserid/{id}")
     ResponseEntity<UserEntity[]> getSubscribersById(@PathVariable(name = "id") String id) {

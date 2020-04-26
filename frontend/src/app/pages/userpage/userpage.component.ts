@@ -55,7 +55,7 @@ export class UserpageComponent implements OnInit {
   onWindowScroll(event) {
     let pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.offsetHeight;
     let max = document.documentElement.scrollHeight;
-    if (!this.loadingMore  && !this.allPostsLoaded) {
+    if (!this.loadingMore  && !this.allPostsLoaded && this.user) {
       if (pos > ((max) * 0.9)) {
         console.log("loading more");
         this.loadingMore = true;
@@ -80,21 +80,27 @@ export class UserpageComponent implements OnInit {
   }
 
   getSubscriptions() {
-    this.subscriptionService.getUserSubscriptions(this.user.id, this.currUser.id).subscribe(value => {
-      this.subscriptionData = value;
-    })
+    if(this.currUser) {
+      this.subscriptionService.getUserSubscriptions(this.user.id, this.currUser.id).subscribe(value => {
+        this.subscriptionData = value;
+      })
+    }
   }
 
   subscribe() {
-    this.subscriptionService.subscribe(this.currUser.id, this.user.id).subscribe(value => {
-      this.subscriptionData = value;
-    })
+    if (this.currUser) {
+      this.subscriptionService.subscribe(this.currUser.id, this.user.id).subscribe(value => {
+        this.subscriptionData = value;
+      })
+    }
   }
 
   unsubscribe() {
-    this.subscriptionService.unsubscribe(this.currUser.id, this.user.id).subscribe(value => {
-      this.subscriptionData = value;
-    })
+    if (this.currUser) {
+      this.subscriptionService.unsubscribe(this.currUser.id, this.user.id).subscribe(value => {
+        this.subscriptionData = value;
+      })
+    }
   }
 
 }

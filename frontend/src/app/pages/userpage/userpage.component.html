@@ -16,8 +16,8 @@
             <p *ngIf="subscriptionData" class="subinfo">Followers {{subscriptionData.subscribers}}</p>
             <p *ngIf="subscriptionData" class="subinfo">Following {{subscriptionData.subscriptions}}</p>
             <div *ngIf="currUser && subscriptionData">
-                <button *ngIf="!subscriptionData.isCurrUserSubscribed && (currUser.id != user.id)" mat-raised-button color="primary" class="sub-btn" (click)="subscribe()">Subscribe</button>
-                <button *ngIf="subscriptionData.isCurrUserSubscribed && (currUser.id != user.id)" mat-raised-button color="primary" class="sub-btn" (click)="unsubscribe()">Unsubscribe</button>
+                <button *ngIf="currUser && !subscriptionData.isCurrUserSubscribed && (currUser.id != user.id)" mat-raised-button color="primary" class="sub-btn" (click)="subscribe()">Subscribe</button>
+                <button *ngIf="currUser && subscriptionData.isCurrUserSubscribed && (currUser.id != user.id)" mat-raised-button color="primary" class="sub-btn" (click)="unsubscribe()">Unsubscribe</button>
             </div>
         </div>
     </div>

@@ -40,6 +40,9 @@ export class AddpostpageComponent implements OnInit {
         console.log(this.filesToUpload);
         this.addPostService.postFile(this.filesToUpload, this.currUser.id, formData.description).subscribe(data => {
             this.successfullyAdded = true;
+            confirm("Post has been successfully added");
+            let userUrl = '/user/' + this.currUser.username;
+            this.router.navigate([userUrl]);
           }, error => {
             console.log(error);
           });

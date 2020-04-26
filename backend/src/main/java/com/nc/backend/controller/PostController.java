@@ -1,9 +1,11 @@
 package com.nc.backend.controller;
 
 import com.nc.backend.model.HashtagsEntity;
+import com.nc.backend.model.PostHashtagsCount;
 import com.nc.backend.model.PostsEntity;
 import com.nc.backend.model.UserIdPostDescription;
 import com.nc.backend.repositories.HashtagRepository;
+import com.nc.backend.repositories.PostHashtagRepository;
 import com.nc.backend.repositories.PostRepository;
 import com.nc.backend.services.HashtagService;
 import com.nc.backend.services.PostService;
@@ -46,6 +48,11 @@ public class PostController {
     public List<PostsEntity> getPostsByUserSubscriptions(@PathVariable(name = "id") String id,
                                                          @PathVariable(name = "page") String page) {
         return postService.getPostsFromSubscriptions(Integer.parseInt(id), Integer.parseInt(page));
+    }
+
+    @GetMapping("getposthashtagscount")
+    public List<PostHashtagsCount> getPostHashtagsCount() {
+        return this.postService.getPostHashtagsCount();
     }
 
 }

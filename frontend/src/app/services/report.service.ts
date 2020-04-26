@@ -31,11 +31,11 @@ export class ReportService {
   }
 
   blockUser(userId: number) {
-    return this.http.get('/api/reports/blockuser/' + userId); 
+    return this.http.get('/api/users/blockuser/' + userId); 
   }
 
   unblockUser(userId: number) {
-    return this.http.get('/api/reports/unblockuser/' + userId); 
+    return this.http.get('/api/users/unblockuser/' + userId); 
   }
 
   markAsChecked(reportId: number) {
