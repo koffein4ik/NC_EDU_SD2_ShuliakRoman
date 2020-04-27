@@ -21,23 +21,24 @@ import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 @RestController
 @RequestMapping("api/users")
 public class UserController {
 
     @Autowired
-    RestTemplate restTemplate;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
-    @Autowired
-    UserService userService;
+    private UserService userService;
+
+    private final RestTemplate restTemplate = new RestTemplate();
+
 
     @GetMapping("getuserbynickname/{nickname}")
-    public ResponseEntity<UserViewModel> getUserByNickname(@PathVariable(name = "nickname") String nickname) {
-        return restTemplate.getForEntity("http://localhost:8080/api/users/getuserbynickname/" + nickname, UserViewModel.class);
+    public UserViewModel getUserViewModelByNickname(@PathVariable(name = "nickname") String nickname) {
+        return this.userService.getUserViewModelByNickname(nickname);
     }
 
     @PreAuthorize("isAnonymous()")
@@ -54,8 +55,8 @@ public class UserController {
 
     @PreAuthorize("hasRole('ROLE_Admin')")
     @GetMapping("getallusers/{page}")
-    public ResponseEntity<UserViewModel[]> getAllUsers(@PathVariable(name = "page") String page) {
-        return restTemplate.getForEntity("http://localhost:8080/api/users/getallusers/" + page, UserViewModel[].class);
+    public UserViewModel[] getAllUsers(@PathVariable(name = "page") String page) {
+        return restTemplate.getForObject("http://localhost:8080/api/users/getallusers/" + page, UserViewModel[].class);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_Admin', 'ROLE_User')")
@@ -91,55 +92,23 @@ public class UserController {
         return HttpStatus.BAD_REQUEST;
     }
 
-    @RequestMapping(path = "getpost", method = RequestMethod.GET)
-    public ResponseEntity<PostsEntity[]> getPost() {
-        ResponseEntity<PostsEntity[]> posts = restTemplate.getForEntity("http://localhost:8080/api/posts/show", PostsEntity[].class);
-        for(PostsEntity post : posts.getBody()) {
-             String folderpath = "src/main/resources/userphotos/users/" + post.getUser().getId() + "/posts/" + post.getPostId();
-            File folder = new File(folderpath);
-            File[] listOfFiles = folder.listFiles();
-            Set<String> photos = new HashSet<>();
-            for (int i = 0; i < listOfFiles.length; i++) {
-                System.out.println(listOfFiles[i].getName());
-                photos.add(listOfFiles[i].getName());
-            }
-            post.setPhotoURIs(photos);
-        }
-        System.out.println(posts.getBody());
-        return posts;
-    }
-
-    @RequestMapping(
-            path = "images/{userId}/{postId}/{photoId}",
-            method = RequestMethod.GET,
-            produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<byte[]> getImage(@PathVariable String userId, @PathVariable String postId, @PathVariable String photoId) throws IOException {
-        System.out.println(System.getProperty("user.dir"));
-        String photosPath = "src/main/resources/userphotos/users/" + userId + "/posts/" + postId + "/" + photoId;
-        System.out.println(photosPath);
-        RandomAccessFile file = new RandomAccessFile(photosPath, "r");
-        byte[] byteArrray = new byte[(int)file.length()];
-        file.readFully(byteArrray);
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(byteArrray);
-    }
+//    @RequestMapping(
+//            path = "images/{userId}/{postId}/{photoId}",
+//            method = RequestMethod.GET,
+//            produces = MediaType.IMAGE_PNG_VALUE)
+//    public ResponseEntity<byte[]> getImage(@PathVariable String userId, @PathVariable String postId, @PathVariable String photoId) throws IOException {
+//        System.out.println(System.getProperty("user.dir"));
+//        String photosPath = "src/main/resources/userphotos/users/" + userId + "/posts/" + postId + "/" + photoId;
+//        System.out.println(photosPath);
+//        RandomAccessFile file = new RandomAccessFile(photosPath, "r");
+//        byte[] byteArrray = new byte[(int)file.length()];
+//        file.readFully(byteArrray);
+//        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(byteArrray);
+//    }
 
     @GetMapping(path = "getuseravatar/{userid}", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<byte[]> getUserAvatar(@PathVariable(name="userid") String userId) throws IOException {
-        System.out.println(System.getProperty("user.dir"));
-        String photosPath = "src/main/resources/userphotos/users/" + userId + "/avatar" + "/avatar.jpg";
-        System.out.println(photosPath);
-        File fileDir = new File(photosPath);
-        byte[] byteArrray;
-        if (fileDir.exists() && !fileDir.isDirectory()) {
-            RandomAccessFile file = new RandomAccessFile(photosPath, "r");
-            byteArrray = new byte[(int) file.length()];
-            file.readFully(byteArrray);
-        } else {
-            RandomAccessFile file = new RandomAccessFile("src/main/resources/userphotos/nosuchimage.png", "r");
-            byteArrray = new byte[(int) file.length()];
-            file.readFully(byteArrray);
-        }
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(byteArrray);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(userService.getUserAvatar(Integer.parseInt(userId)));
     }
 
 }

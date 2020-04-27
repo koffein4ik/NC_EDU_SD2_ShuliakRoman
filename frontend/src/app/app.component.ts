@@ -15,12 +15,11 @@ export class AppComponent implements OnInit{
   ngOnInit(){
     if (this.storageService.getCurrentUser()) {
       this.userService.checkToken().subscribe((value) => {
-        console.log('validated');
-      }), ((error) => {
+      }, ((error) => {
         this.storageService.setCurrentUser(null);
         this.storageService.clearToken();
-        console.log(error);
-      })
+        window.location.reload();
+      }));
     }
   }
 

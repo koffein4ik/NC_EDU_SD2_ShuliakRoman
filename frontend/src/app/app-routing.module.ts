@@ -11,6 +11,7 @@ import { MyfeedComponent } from './pages/myfeed/myfeed.component';
 import { ReportspageComponent } from './pages/reportspage/reportspage.component';
 import { EdituserinfopageComponent } from './pages/edituserinfopage/edituserinfopage.component';
 import { AlluserspageComponent } from './pages/alluserspage/alluserspage.component';
+import { StatisticComponent } from './pages/statistic/statistic.component';
 
 const routes: Routes = [
   { path: 'main', component: FeedpageComponent },
@@ -24,7 +25,8 @@ const routes: Routes = [
   { path: 'myfeed', component: MyfeedComponent },
   { path: 'reports', component: ReportspageComponent },
   { path: 'edituserinfo', component: EdituserinfopageComponent },
-  { path: 'allusers', component: AlluserspageComponent }
+  { path: 'allusers', component: AlluserspageComponent },
+  { path: 'staticstic', component: StatisticComponent }
 ];
 
 @NgModule({

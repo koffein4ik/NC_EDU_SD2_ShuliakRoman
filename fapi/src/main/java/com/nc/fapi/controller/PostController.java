@@ -1,8 +1,9 @@
 package com.nc.fapi.controller;
 
+import com.nc.fapi.model.PostHashtagsCount;
 import com.nc.fapi.model.PostsEntity;
 import com.nc.fapi.model.UserIdPostDescription;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
+import com.nc.fapi.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,8 +18,6 @@ import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.apache.tomcat.util.http.fileupload.FileUtils.deleteDirectory;
 
@@ -27,17 +26,20 @@ import static org.apache.tomcat.util.http.fileupload.FileUtils.deleteDirectory;
 
 public class PostController {
 
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    private PostService postService;
+
     @Autowired
-    RestTemplate restTemplate;
+    public PostController(PostService postService) {
+        this.postService = postService;
+    }
 
     @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(path = "getallposts/{page}", method = RequestMethod.GET)
-    public ResponseEntity<PostsEntity[]> getPosts(@PathVariable(name = "page") String page) {
-        ResponseEntity<PostsEntity[]> posts = restTemplate.getForEntity("http://localhost:8080/api/posts/show/" + page, PostsEntity[].class);
-        if (posts.getBody() != null) {
-            getImagesToPosts(posts.getBody());
-        }
-        return posts;
+    public PostsEntity[] getPosts(@PathVariable(name = "page") String page) {
+        PostsEntity[] posts = restTemplate.getForObject("http://localhost:8080/api/posts/show/" + page, PostsEntity[].class);
+        return postService.getPhotosForPosts(posts);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_Admin', 'ROLE_User')")
@@ -95,42 +97,26 @@ public class PostController {
     }
 
     @RequestMapping("getpostsbynickname/{nickname}/{page}")
-    public ResponseEntity<PostsEntity[]> getPostsByNickname(@PathVariable(name = "nickname") String nickname,
+    public PostsEntity[] getPostsByNickname(@PathVariable(name = "nickname") String nickname,
                                                             @PathVariable(name = "page") String page) {
         String url = "http://localhost:8080/api/posts/" +
                 "getpostsbyusernickname/" + nickname + "/" + page;
-        ResponseEntity<PostsEntity[]> posts = restTemplate.getForEntity(url, PostsEntity[].class);
-        if (posts.getBody() != null) {
-            getImagesToPosts(posts.getBody());
-        }
-        return posts;
+        PostsEntity[] posts = restTemplate.getForObject(url, PostsEntity[].class);
+        return postService.getPhotosForPosts(posts);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_Admin', 'ROLE_User')")
     @RequestMapping("getpostsfromsubscriptions/{id}/{page}")
-    public ResponseEntity<PostsEntity[]> getPostsFromSubscriptions(@PathVariable(name = "id") String userId,
+    public PostsEntity[] getPostsFromSubscriptions(@PathVariable(name = "id") String userId,
                                                                    @PathVariable(name = "page") String page) {
-        ResponseEntity<PostsEntity[]> posts = restTemplate.getForEntity("http://localhost:8080/api/posts/" +
+        PostsEntity[] posts = restTemplate.getForObject("http://localhost:8080/api/posts/" +
                 "getpostsfromsubscriptions/" + Integer.parseInt(userId) + "/" + page, PostsEntity[].class);
-        if (posts.getBody() != null) {
-            getImagesToPosts(posts.getBody());
-        }
-        return posts;
+        return postService.getPhotosForPosts(posts);
     }
 
-    public PostsEntity[] getImagesToPosts(PostsEntity[] posts) {
-        for (PostsEntity post : posts) {
-            String folderpath = "src/main/resources/userphotos/users/" + post.getUser().getId() + "/posts/" + post.getPostId();
-            File folder = new File(folderpath);
-            if (folder.exists()) {
-                File[] listOfFiles = folder.listFiles();
-                Set<String> photos = new HashSet<>();
-                for (int i = 0; i < listOfFiles.length; i++) {
-                    photos.add(listOfFiles[i].getName());
-                }
-                post.setPhotoURIs(photos);
-            }
-        }
-        return posts;
+    @PreAuthorize("hasRole('ROLE_Admin')")
+    @GetMapping(path = "statistics")
+    public PostHashtagsCount[] getPostHashtagsCount() {
+        return restTemplate.getForObject("http://localhost:8080/api/posts/getposthashtagscount", PostHashtagsCount[].class);
     }
 }

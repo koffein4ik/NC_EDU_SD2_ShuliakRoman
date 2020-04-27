@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,7 +21,40 @@ import java.util.Set;
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
+    public UserServiceImpl(BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
+
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Override
+    public UserViewModel getUserViewModelByNickname(String nickname) {
+        return restTemplate.getForObject("http://localhost:8080/api/users/getuserbynickname/" + nickname, UserViewModel.class);
+    }
+
+    @Override
+    public byte[] getUserAvatar(Integer userId) {
+        String photosPath = "src/main/resources/userphotos/users/" + userId + "/avatar" + "/avatar.jpg";
+        File fileDir = new File(photosPath);
+        byte[] byteArrray;
+        try {
+            if (fileDir.exists() && !fileDir.isDirectory()) {
+                RandomAccessFile file = new RandomAccessFile(photosPath, "r");
+                byteArrray = new byte[(int) file.length()];
+                file.readFully(byteArrray);
+            } else {
+                RandomAccessFile file = new RandomAccessFile("src/main/resources/userphotos/nosuchimage.png", "r");
+                byteArrray = new byte[(int) file.length()];
+                file.readFully(byteArrray);
+            }
+            return byteArrray;
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        return new byte[0];
+    }
 
     @Override
     public UserEntity findByLogin(String login) {
@@ -31,7 +66,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity userEntity = findByLogin(username);
-        System.out.println(userEntity.getPassword());
         if (userEntity == null) {
             throw  new UsernameNotFoundException("Invalid username or password");
         }

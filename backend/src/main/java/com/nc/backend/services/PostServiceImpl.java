@@ -36,7 +36,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostsEntity> findAll(Integer page) {
-        Pageable currPage = PageRequest.of(page, 1);
+        Pageable currPage = PageRequest.of(page, 1, Sort.by("date").descending());
         return postRepository.findAll(currPage).getContent();
     }
 
@@ -89,8 +89,22 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<PostHashtagsCount> getPostHashtagsCount() {
+        Iterable<PostsEntity> posts = postRepository.findAll();
+        List<PostHashtagsCount> postHashtagsCounts = new ArrayList<>();
+        for(PostsEntity post: posts) {
+            PostHashtagsCount count = new PostHashtagsCount();
+            count.setPostId(post.getPostId());
+            count.setHashtagsCount(post.getHashtags().size());
+            postHashtagsCounts.add(count);
+        }
+        Collections.sort(postHashtagsCounts);
+        return postHashtagsCounts;
+    }
+
+    @Override
     public List<PostsEntity> getPostsByUserNickname(String nickname, Integer page) {
-        Pageable onepost = PageRequest.of(page, 1);
+        Pageable onepost = PageRequest.of(page, 1, Sort.by("date").descending());
         Optional<UserEntity> user = userRepository.findByNickname(nickname);
         if (user.isPresent()) {
             List<PostsEntity> posts = postRepository.findAllByUserId(user.get().getId(), onepost);
@@ -103,7 +117,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostsEntity> getPostsFromSubscriptions(Integer id, Integer page) {
-        Pageable pageable = PageRequest.of(page, 2);
+        Pageable pageable = PageRequest.of(page, 2, Sort.by("date").descending());
         return postRepository.findAllFromSubscriptions(id, pageable);
     }
 

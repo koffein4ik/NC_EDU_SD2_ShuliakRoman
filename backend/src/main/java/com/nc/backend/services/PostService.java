@@ -1,6 +1,7 @@
 package com.nc.backend.services;
 
 import com.nc.backend.model.HashtagsEntity;
+import com.nc.backend.model.PostHashtagsCount;
 import com.nc.backend.model.PostsEntity;
 import com.nc.backend.model.UserIdPostDescription;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,8 @@ public interface PostService {
     Optional<PostsEntity> addNewPost(PostsEntity postsEntity);
 
     PostsEntity getPostEntity(UserIdPostDescription userIdPostDescription);
+
+    List<PostHashtagsCount> getPostHashtagsCount();
 
     List<PostsEntity> getPostsByUserNickname(String nickname, Integer page);
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Post } from '../../models/post';
+import { PostHashtagCount } from '../../models/postHashtagCount';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,10 @@ export class PostService {
 
   getPosts(page: number) {
     return this.http.get<Post[]>('/api/posts/getallposts/' + page);
+  }
+
+  getPostHashtagCount() {
+    return this.http.get<PostHashtagCount[]>('/api/posts/statistics');
   }
 
   getPostsByHashtagText(text: string, page: number) {

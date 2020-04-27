@@ -13,7 +13,7 @@ export class APIInterceptor implements HttpInterceptor {
         "Authorization": "Bearer " + token
       } : null)
     });
-    console.log("Intercepted HTTP call", authReq);
+    // console.log("Intercepted HTTP call", authReq);
     return next.handle(authReq);
   }
 }

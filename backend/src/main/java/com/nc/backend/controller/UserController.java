@@ -3,10 +3,16 @@ package com.nc.backend.controller;
 import com.nc.backend.model.UserEntity;
 import com.nc.backend.model.LoginData;
 import com.nc.backend.services.UserService;
+import javafx.application.Application;
+import org.apache.catalina.core.ApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.ContextLoader;
+import org.springframework.web.context.WebApplicationContext;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,15 +25,6 @@ public class UserController {
     @GetMapping("show")
     Iterable<UserEntity> getAllUsers() {
         return userService.findAll();
-    }
-
-    @RequestMapping(path = "/update", method = RequestMethod.GET)
-    public String updateUser(@RequestParam int id, @RequestParam String newDescription) {
-        Optional<UserEntity> user = userService.findById(id);
-        UserEntity user1 = user.get();
-        user1.setProfileDescription(newDescription);
-        userService.save(user1);
-        return "Updated successfully";
     }
 
     @PostMapping(value = "regnewuser")

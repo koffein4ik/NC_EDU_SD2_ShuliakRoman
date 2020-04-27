@@ -3,6 +3,7 @@ package com.nc.fapi.controller;
 import com.nc.fapi.model.PostsEntity;
 import com.nc.fapi.model.ReportData;
 import com.nc.fapi.model.ReportsEntity;
+import com.nc.fapi.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,10 +18,15 @@ import java.util.Set;
 @RequestMapping("api/reports")
 public class ReportController {
 
-    @Autowired
-    RestTemplate restTemplate;
+    private final RestTemplate restTemplate = new RestTemplate();
 
-    @PreAuthorize("hasRole('ROLE_Admin')")
+    private PostService postService;
+
+    public ReportController(PostService postService) {
+        this.postService = postService;
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_Admin', 'ROLE_User')")
     @PostMapping("submitreport")
     public void submitReport(@RequestBody ReportData reportData) {
         HttpHeaders headers = new HttpHeaders();
@@ -32,24 +38,13 @@ public class ReportController {
 
     @PreAuthorize("hasRole('ROLE_Admin')")
     @GetMapping("getreports/{page}")
-    public ResponseEntity<ReportsEntity[]> getReports(@PathVariable(name = "page") String page) {
-        ResponseEntity<ReportsEntity[]> reports = this.restTemplate.
-                getForEntity("http://localhost:8080/api/reports/getreports/" + page, ReportsEntity[].class);
-        if (reports.getBody() != null) {
-            for (ReportsEntity report : reports.getBody()) {
-                PostsEntity post = report.getPost();
-                String folderpath = "src/main/resources/userphotos/users/" + post.getUser().getId() + "/posts/" + post.getPostId();
-                File folder = new File(folderpath);
-                if (folder.exists()) {
-                    File[] listOfFiles = folder.listFiles();
-                    Set<String> photos = new HashSet<>();
-                    for (int i = 0; i < listOfFiles.length; i++) {
-                        photos.add(listOfFiles[i].getName());
-                    }
-                    post.setPhotoURIs(photos);
-                }
-                //report.setPost(post);
-            }
+    public ReportsEntity[] getReports(@PathVariable(name = "page") String page) {
+        ReportsEntity[] reports = this.restTemplate.
+                getForObject("http://localhost:8080/api/reports/getreports/" + page, ReportsEntity[].class);
+        for (ReportsEntity report : reports) {
+            PostsEntity post = report.getPost();
+            postService.getPhotosFromPost(post);
+            //report.setPost(post);
         }
         return reports;
     }
@@ -62,17 +57,7 @@ public class ReportController {
         if (reports.getBody() != null) {
             for (ReportsEntity report : reports.getBody()) {
                 PostsEntity post = report.getPost();
-                String folderpath = "src/main/resources/userphotos/users/" + post.getUser().getId() + "/posts/" + post.getPostId();
-                File folder = new File(folderpath);
-                if (folder.exists()) {
-                    File[] listOfFiles = folder.listFiles();
-                    Set<String> photos = new HashSet<>();
-                    for (int i = 0; i < listOfFiles.length; i++) {
-                        photos.add(listOfFiles[i].getName());
-                    }
-                    post.setPhotoURIs(photos);
-                }
-                //report.setPost(post);
+                postService.getPhotosFromPost(post);
             }
         }
         return reports;
@@ -80,24 +65,13 @@ public class ReportController {
 
     @PreAuthorize("hasRole('ROLE_Admin')")
     @GetMapping("markreportaschecked/{reportid}")
-    public ResponseEntity<ReportsEntity[]> markReportAsChecked(@PathVariable(name = "reportid") String reportId) {
-        ResponseEntity<ReportsEntity[]> reports = this.restTemplate.
-                getForEntity("http://localhost:8080/api/reports/markaschecked/" + reportId, ReportsEntity[].class);
-        if (reports.getBody() != null) {
-            for (ReportsEntity report : reports.getBody()) {
-                PostsEntity post = report.getPost();
-                String folderpath = "src/main/resources/userphotos/users/" + post.getUser().getId() + "/posts/" + post.getPostId();
-                File folder = new File(folderpath);
-                if (folder.exists()) {
-                    File[] listOfFiles = folder.listFiles();
-                    Set<String> photos = new HashSet<>();
-                    for (int i = 0; i < listOfFiles.length; i++) {
-                        photos.add(listOfFiles[i].getName());
-                    }
-                    post.setPhotoURIs(photos);
-                }
-                //report.setPost(post);
-            }
+    public ReportsEntity[] markReportAsChecked(@PathVariable(name = "reportid") String reportId) {
+        ReportsEntity[] reports = this.restTemplate.
+                getForObject("http://localhost:8080/api/reports/markaschecked/" + reportId, ReportsEntity[].class);
+        for (ReportsEntity report : reports) {
+            PostsEntity post = report.getPost();
+            postService.getPhotosFromPost(post);
+            //report.setPost(post);
         }
         return reports;
     }

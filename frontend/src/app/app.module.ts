@@ -33,6 +33,7 @@ import { EdituserinfopageComponent } from './pages/edituserinfopage/edituserinfo
 import { AlluserspageComponent } from './pages/alluserspage/alluserspage.component';
 import { APIInterceptor } from "./interceptors/api-interceptor";
 import { UserService } from "./services/user.service";
+import { StatisticComponent } from './pages/statistic/statistic.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { UserService } from "./services/user.service";
     ReportdialogComponent,
     ReportspageComponent,
     EdituserinfopageComponent,
-    AlluserspageComponent
+    AlluserspageComponent,
+    StatisticComponent
   ],
   imports: [
     BrowserModule,

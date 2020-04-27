@@ -41,7 +41,6 @@ export class MyfeedComponent implements OnInit {
     let max = document.documentElement.scrollHeight;
     if (!this.loadingMore  && !this.allPostsLoaded) {
       if (pos > ((max) * 0.9)) {
-        console.log("loading more");
         this.loadingMore = true;
         this.postService.getPostsFromSubscriptions(this.currUser.id, this.page).subscribe(value => {
           if (value.length == 0) {
@@ -50,7 +49,7 @@ export class MyfeedComponent implements OnInit {
           else {
             this.page++;
           }
-          setTimeout(function() { }, 1000);
+          // setTimeout(function() { }, 1000);
           this.posts = this.posts.concat(value);
           this.loadingMore = false;
         })
