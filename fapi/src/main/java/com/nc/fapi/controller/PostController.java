@@ -83,7 +83,7 @@ public class PostController {
         String photosPath = "src/main/resources/userphotos/users/" + postsEntity.getUser().getId() + "/posts/" +
                 postsEntity.getPostId() + "/";
         File file = new File(photosPath);
-        boolean dirCreated = file.mkdir();
+        boolean dirCreated = file.mkdirs();
         if (dirCreated) {
             System.out.println("Dir created");
             for (MultipartFile multipartFile : files) {

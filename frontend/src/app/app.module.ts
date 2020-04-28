@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
- 
+
 import { AppComponent } from './app.component';
 import { MainpageComponent } from './components/mainpage/mainpage.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -34,6 +34,8 @@ import { AlluserspageComponent } from './pages/alluserspage/alluserspage.compone
 import { APIInterceptor } from "./interceptors/api-interceptor";
 import { UserService } from "./services/user.service";
 import { StatisticComponent } from './pages/statistic/statistic.component';
+import { ImageEditorComponent } from './components/image-editor/image-editor.component';
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 
 @NgModule({
   declarations: [
@@ -57,7 +59,8 @@ import { StatisticComponent } from './pages/statistic/statistic.component';
     ReportspageComponent,
     EdituserinfopageComponent,
     AlluserspageComponent,
-    StatisticComponent
+    StatisticComponent,
+    ImageEditorComponent
   ],
   imports: [
     BrowserModule,
@@ -70,7 +73,8 @@ import { StatisticComponent } from './pages/statistic/statistic.component';
     MatInputModule,
     MatButtonModule,
     MatDialogModule,
-    MatTableModule
+    MatTableModule,
+    MatSlideToggleModule
   ],
   entryComponents: [
     ReportdialogComponent

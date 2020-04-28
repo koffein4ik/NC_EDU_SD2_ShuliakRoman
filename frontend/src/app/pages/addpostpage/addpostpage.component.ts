@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { NgForm } from '@angular/forms';
-import { AddpostService } from '../../services/addpost/addpost.service';
-import { StorageUserModel } from '../../models/storageUserModel';
-import { StorageService } from '../../services/storage.service';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {Router} from '@angular/router';
+import {NgForm} from '@angular/forms';
+import {AddpostService} from '../../services/addpost/addpost.service';
+import {StorageUserModel} from '../../models/storageUserModel';
+import {StorageService} from '../../services/storage.service';
 
 @Component({
   selector: 'app-addpostpage',
@@ -16,7 +16,8 @@ export class AddpostpageComponent implements OnInit {
   @ViewChild('myFileInput', {static: false}) myFileInput;
 
   constructor(private addPostService: AddpostService, private storageService: StorageService,
-    private router: Router) { }
+              private router: Router) {
+  }
 
   filesToUpload: File[] = [];
   currUser: StorageUserModel;
@@ -31,7 +32,7 @@ export class AddpostpageComponent implements OnInit {
   }
 
   // onClickSubmit(formData): void {
-  //   console.log("Submitted");  
+  //   console.log("Submitted");
   // }
 
   onClickSubmit(formData): void {
@@ -39,13 +40,13 @@ export class AddpostpageComponent implements OnInit {
       if (this.currUser) {
         console.log(this.filesToUpload);
         this.addPostService.postFile(this.filesToUpload, this.currUser.id, formData.description).subscribe(data => {
-            this.successfullyAdded = true;
-            confirm("Post has been successfully added");
-            let userUrl = '/user/' + this.currUser.username;
-            this.router.navigate([userUrl]);
-          }, error => {
-            console.log(error);
-          });
+          this.successfullyAdded = true;
+          confirm("Post has been successfully added");
+          let userUrl = '/user/' + this.currUser.username;
+          this.router.navigate([userUrl]);
+        }, error => {
+          console.log(error);
+        });
       }
     } else {
       confirm('You have to choose at least one photo to upload');
@@ -67,6 +68,23 @@ export class AddpostpageComponent implements OnInit {
       }
     });
     this.myFileInput.nativeElement.value = '';
-}
+  }
+
+  public changePicture(data: {index: number, file: File}): void {
+    console.log('in change picture');
+    console.log(data.index);
+    console.log(data.file);
+    this.filesToUpload[data.index] = data.file;
+    this.imgurls = [];
+    Array.from(this.filesToUpload).forEach(file => {
+      var reader = new FileReader();
+      this.filesToUpload.push(file);
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        this.imgurls.push(reader.result.toString());
+      }
+    });
+    console.log(this.imgurls);
+  }
 
 }

@@ -1,0 +1,16 @@
+<div class="image-editor-container">
+  <div class="additional-container">
+    <div class="canvas-container" [id]="'canvas-container-' + index">
+      <canvas [id]="'canvas-' + index" #canvasElement class="canvas" height="750">
+      </canvas>
+    </div>
+  </div>
+  <div class="masks-container">
+    <div class="mask-image-container" *ngFor="let number of [0,1,2,3,4]">
+      <img [src]="maskURL">
+    </div>
+  </div>
+  <div class="save-button-container">
+    <button mat-button (click)="save()">Save</button>
+  </div>
+</div>

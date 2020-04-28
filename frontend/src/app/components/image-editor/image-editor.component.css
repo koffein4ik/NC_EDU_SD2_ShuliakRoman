@@ -1,0 +1,20 @@
+.masks-container {
+  margin: 20px;
+  height: 150px;
+  display: flex;
+  overflow-x: auto;
+}
+
+.canvas-container {
+  display: inline-block;
+  align-content: center;
+  margin: 5px auto;
+  border: 1px solid black;
+  padding: 5px;
+}
+
+.additional-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
