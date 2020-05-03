@@ -2,7 +2,7 @@ import {Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, V
 import 'fabric';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import doc from "igniteui-cli/lib/commands/doc";
+import {Filter} from "../../models/filter";
 
 declare let fabric;
 
@@ -22,21 +22,32 @@ export class ImageEditorComponent implements OnInit {
   @Output()
   onSaveFile = new EventEmitter<any>();
 
+  public maskURLs: string[] = [
+    "/../assets/masks/1.jpg",
+    "/../assets/masks/1.jpg",
+    "/../assets/masks/1.jpg",
+    "/../assets/masks/1.jpg",
+    "/../assets/masks/1.jpg"
+  ];
+
+  public filters: Filter[] = [
+    {name: "Sepia", filterObj: new fabric.Image.filters.Sepia, isApplied: false},
+    {name: "Grayscale", filterObj: new fabric.Image.filters.Grayscale, isApplied: false}
+  ];
+
   @ViewChild('canvasElement', {read: undefined, static: false}) el: ElementRef;
 
   private canvas: any;
   private maskURL: string = "/../assets/masks/1.jpg";
   private fileReader = new FileReader();
+  private maskFileReader = new FileReader();
   private readonly canvasHeight = 750;
 
   constructor(private http: HttpClient, private renderer: Renderer2) { }
 
   ngOnInit() {
-    console.log(this.image);
-    //const reader = new FileReader();
 
     this.fileReader.onload = (imgFile) => {
-      console.log('in onload');
       const data = imgFile.target["result"];
       fabric.Image.fromURL(data, (img) => {
         let oImg = img.set({
@@ -45,16 +56,13 @@ export class ImageEditorComponent implements OnInit {
           angle: 0,
         }).scale(1);
         const multiplier = img.width / img.height;
-        console.log(multiplier);
         img.scaleToHeight(this.canvasHeight);
-        img.filters.push(new fabric.Image.filters.Pixelate);
-        img.applyFilters();
+        //img.filters.push(new fabric.Image.filters.Pixelate);
+        //img.applyFilters();
         const canvasElement = <any>document.getElementById("canvas-" + this.index);
         canvasElement.width = this.canvasHeight * multiplier;
         const canvasContainer = <any>document.getElementById('canvas-container-' + this.index);
         canvasContainer.width = this.canvasHeight * multiplier + 12;
-        console.log(canvasContainer);
-        console.log(this.canvasHeight * multiplier);
         this.canvas = new fabric.Canvas('canvas-' + this.index, {selection: false});
         this.canvas.add(oImg).renderAll();
         // var object = new fabric.Circle({
@@ -69,6 +77,18 @@ export class ImageEditorComponent implements OnInit {
       });
     };
     this.fileReader.readAsDataURL(this.image);
+
+    this.maskFileReader.onload = (imgFile) => {
+      const data = imgFile.target["result"];
+      fabric.Image.fromURL(data, (img) => {
+        let oImg = img.set({
+          left: 0,
+          top: 0,
+          angle: 0,
+        }).scale(1);
+        this.canvas.add(oImg).renderAll();
+      });
+    };
     // this.http.get('/assets/masks/1.jpg', {responseType: "blob"}).subscribe((data: Blob) => {
     //   console.log(data);
     //   reader.readAsDataURL(data);
@@ -77,8 +97,8 @@ export class ImageEditorComponent implements OnInit {
   }
 
   public addMaskToPicture(maskNumber: number) {
-      this.getMask(1).subscribe(data => {
-        this.fileReader.readAsDataURL(data);
+      this.getMask(maskNumber).subscribe(data => {
+        this.maskFileReader.readAsDataURL(data);
       })
   }
 
@@ -92,6 +112,7 @@ export class ImageEditorComponent implements OnInit {
 
   public getCanvasAsFile(): File {
     const data = this.canvas.toDataURL({format: 'png'});
+    console.log(data);
     //const blob = new Blob([new Uint8Array(data)], {type: 'image/png'});
     var arr = data.split(','),
       mime = arr[0].match(/:(.*?);/)[1],
@@ -106,4 +127,36 @@ export class ImageEditorComponent implements OnInit {
     return new File([u8arr], 'filename', {type:mime});
   }
 
+  public applyFilter(filterNumber: number): void {
+    const canvasData = this.canvas.toDataURL({});
+
+    const reader = new FileReader();
+    reader.onload = (imgFile) => {
+      const data = imgFile.target["result"];
+      fabric.Image.fromURL(data, (img) => {
+        let oImg = img.set({
+          left: 0,
+          top: 0,
+          angle: 0,
+        }).scale(1);
+        img.filters.push(this.filters[filterNumber].filterObj);
+        img.applyFilters();
+        this.canvas.clear();
+        this.canvas.add(oImg).renderAll();
+      });
+    };
+    reader.readAsDataURL(this.b64toBlob(canvasData));
+  }
+
+  b64toBlob(dataURI) {
+
+    var byteString = atob(dataURI.split(',')[1]);
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
+
+    for (var i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: 'image/jpeg' });
+  }
 }

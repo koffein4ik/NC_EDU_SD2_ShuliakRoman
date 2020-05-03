@@ -1,4 +1,9 @@
 <div class="image-editor-container">
+  <div class="filters-container">
+    <div class="filter" *ngFor="let filter of filters; let i = index" (click)="applyFilter(i)">
+      {{filter.name}}
+    </div>
+  </div>
   <div class="additional-container">
     <div class="canvas-container" [id]="'canvas-container-' + index">
       <canvas [id]="'canvas-' + index" #canvasElement class="canvas" height="750">
@@ -6,8 +11,8 @@
     </div>
   </div>
   <div class="masks-container">
-    <div class="mask-image-container" *ngFor="let number of [0,1,2,3,4]">
-      <img [src]="maskURL">
+    <div class="mask-image-container" *ngFor="let url of maskURLs; let i = index" (click)="addMaskToPicture(i)">
+      <img [src]="url">
     </div>
   </div>
   <div class="save-button-container">
