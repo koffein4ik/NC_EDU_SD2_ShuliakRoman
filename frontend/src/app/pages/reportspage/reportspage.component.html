@@ -17,8 +17,8 @@
                 </div>
                 <div class="actions">
                     <p class="available-actions">Availbale actions:</p>
-                    <button *ngIf="report.reportedUser.status == 'active'" mat-raised-button color="primary" class="action-button" (click)="blockUser(report.reportedUser.id)">Block user</button>
-                    <button *ngIf="report.reportedUser.status == 'banned'" mat-raised-button color="primary" class="action-button" (click)="unblockUser(report.reportedUser.id)">Unblock user</button>
+<!--                    <button *ngIf="report.reportedUser.status == 'active'" mat-raised-button color="primary" class="action-button" (click)="blockUser(report.reportedUser.id)">Block user</button>-->
+<!--                    <button *ngIf="report.reportedUser.status == 'banned'" mat-raised-button color="primary" class="action-button" (click)="unblockUser(report.reportedUser.id)">Unblock user</button>-->
                     <button mat-raised-button color="primary" class="action-button" (click)="deletePost(report.post)">Delete post</button>
                     <button *ngIf="report.status == 'unchecked'" mat-raised-button color="primary" class="last-action-button" (click)="markAsChecked(report.reportId)">Mark as checked</button>
                 </div>

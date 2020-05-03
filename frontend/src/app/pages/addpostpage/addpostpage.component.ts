@@ -36,6 +36,7 @@ export class AddpostpageComponent implements OnInit {
   // }
 
   onClickSubmit(formData): void {
+    console.trace();
     if (this.filesToUpload.length > 0) {
       if (this.currUser) {
         console.log(this.filesToUpload);
@@ -75,34 +76,11 @@ export class AddpostpageComponent implements OnInit {
     console.log(data.index);
     console.log(data.file);
     this.filesToUpload[data.index] = data.file;
-    this.imgurls = [];
     var reader = new FileReader();
     reader.readAsDataURL(data.file);
     reader.onload = (event) => {
-      this.imgurls.push(reader.result.toString());
+      this.imgurls[data.index] = reader.result.toString();
     };
-    // for (let i = 0; i < this.filesToUpload.length; i++) {
-    //   const file = this.filesToUpload[i];
-    //   if (i !== data.index) {
-    //     var reader = new FileReader();
-    //     this.filesToUpload.push(file);
-    //     reader.readAsDataURL(file);
-    //     reader.onload = (event) => {
-    //       this.imgurls.push(reader.result.toString());
-    //     }
-    //   }
-    // }
-    Array.from(this.filesToUpload).forEach(file => {
-      if(!this.filesToUpload.includes(file)) {
-        var reader = new FileReader();
-        this.filesToUpload.push(file);
-        reader.readAsDataURL(file);
-        reader.onload = (event) => {
-          this.imgurls.push(reader.result.toString());
-        }
-      }
-    });
-    console.log(this.imgurls);
   }
 
 }

@@ -17,7 +17,7 @@ export class AlluserspageComponent implements OnInit {
 
   users: User[];
   currUser: StorageUserModel;
-  displayedColumns: string[] = ['nickname', 'name', 'surname', 'status', 'action'];
+  displayedColumns: string[] = ['nickname', 'name', 'surname', 'status'];
   loadingMore = false;
   allUsersLoaded = false;
   page = 0;

@@ -1,30 +1,33 @@
-<form #addPostForm = "ngForm" class = "addPost-form" (ngSubmit) = "onClickSubmit(addPostForm.value)">
-    <div class="container">
-      <h3>Add post</h3>
-      <hr>
+<form #addPostForm="ngForm" class="addPost-form" (ngSubmit)="onClickSubmit(addPostForm.value)">
+  <div class="container">
+    <h3>Add post</h3>
+    <hr>
 
-      <div class="form-group">
-        <p>Choose files to upload</p>
-        <!-- <label for="file">Choose Files</label> -->
-        <input #myFileInput type="file"
-               accept="image/*"
-               (change)="handleFileInput($event.target.files)" multiple>
-      </div>
-
-      <div *ngFor="let file of filesToUpload; let i = index" [attr.data-index]="i">
-        <p class="filename">{{file.name}}</p>
-        <i class="material-icons" (click)="removeImage(i)">delete</i>
-        <img *ngIf="imgurls[i]" [src]="imgurls[i]" class="attached-image">
-        <mat-slide-toggle #toggle>Edit picture mode</mat-slide-toggle>
-        <app-image-editor *ngIf="toggle.checked" [image]="file" [index]="i" (onSaveFile)="changePicture($event)"></app-image-editor>
-      </div>
-
-      <!-- <label for="description"><b>Description</b></label> -->
-      <p>Enter description</p>
-      <input type="text" placeholder="Description" name="description" ngModel required>
-
-      <button type="submit" [disabled]="!addPostForm.valid" class="addpostbtn">Add</button>
+    <div class="form-group">
+      <p>Choose files to upload</p>
+      <!-- <label for="file">Choose Files</label> -->
+      <input #myFileInput type="file"
+             accept="image/*"
+             (change)="handleFileInput($event.target.files)" multiple>
     </div>
 
-  </form>
+    <div *ngFor="let file of filesToUpload; let i = index" [attr.data-index]="i">
+      <p class="filename">{{file.name}}</p>
+      <i class="material-icons" (click)="removeImage(i)">delete</i>
+      <img *ngIf="imgurls[i]" [src]="imgurls[i]" class="attached-image">
+      <div class="toggle-container">
+        <mat-slide-toggle #toggle>Edit picture mode</mat-slide-toggle>
+      </div>
+      <app-image-editor *ngIf="toggle.checked" [image]="file" [index]="i"
+                        (onSaveFile)="changePicture($event)"></app-image-editor>
+    </div>
+
+    <!-- <label for="description"><b>Description</b></label> -->
+    <p>Enter description</p>
+    <input type="text" placeholder="Description" name="description" ngModel required>
+
+    <button type="submit" [disabled]="!addPostForm.valid" class="addpostbtn">Add</button>
+  </div>
+
+</form>
 

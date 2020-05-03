@@ -107,6 +107,7 @@ export class ImageEditorComponent implements OnInit {
   }
 
   public save(): void {
+    console.log("in save");
     this.onSaveFile.emit({index: this.index, file: this.getCanvasAsFile()})
   }
 
@@ -158,5 +159,9 @@ export class ImageEditorComponent implements OnInit {
       ia[i] = byteString.charCodeAt(i);
     }
     return new Blob([ab], { type: 'image/jpeg' });
+  }
+
+  public removeCurrentObj(): void {
+    this.canvas.remove(this.canvas.getActiveObject());
   }
 }

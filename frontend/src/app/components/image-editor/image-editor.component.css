@@ -1,4 +1,5 @@
 .masks-container {
+  border: 3px solid #333333;
   margin: 20px;
   height: 150px;
   display: flex;
@@ -20,7 +21,28 @@
 }
 
 .filters-container {
+  margin-top: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #333333;
+}
+
+.filter {
+  color: white;
+  background-color: #333333;
+  padding: 10px;
+}
+
+.filter:hover {
+  cursor: pointer;
+  background-color: #3f51b5;
+}
+
+.remove-button-container {
+  font-weight: bold;
+  color: red;
+  cursor: pointer;
+  padding: 5px;
+  border: 1px solid #333333;;
 }

@@ -9,7 +9,7 @@
     <a *ngIf="currUser" routerLink="/myfeed" class="navbar-link">My feed</a>
     <a *ngIf="currUser && currUser.role == 'Admin'" routerLink="/reports" class="navbar-link">Reports</a>
     <a *ngIf="currUser && currUser.role == 'Admin'" routerLink="/allusers" class="navbar-link">All users</a>
-    <a *ngIf="currUser && currUser.role == 'Admin'" routerLink='/staticstic' class="navbar-link">Statistics</a>
+<!--    <a *ngIf="currUser && currUser.role == 'Admin'" routerLink='/staticstic' class="navbar-link">Statistics</a>-->
   </div>
   <p *ngIf="currUser" (click)="logOut()" class="navbar-link">Log out</p>
 </div>
