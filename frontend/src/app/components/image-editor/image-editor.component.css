@@ -1,7 +1,7 @@
 .masks-container {
   border: 3px solid #333333;
   margin: 20px;
-  height: 150px;
+  height: 280px;
   display: flex;
   overflow-x: auto;
 }
@@ -34,9 +34,17 @@
   padding: 10px;
 }
 
+img {
+  height: 250px;
+}
+
 .filter:hover {
   cursor: pointer;
   background-color: #3f51b5;
+}
+
+.mask-image-container {
+  width: auto;
 }
 
 .remove-button-container {

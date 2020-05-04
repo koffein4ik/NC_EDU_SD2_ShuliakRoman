@@ -23,16 +23,24 @@ export class ImageEditorComponent implements OnInit {
   onSaveFile = new EventEmitter<any>();
 
   public maskURLs: string[] = [
-    "/../assets/masks/1.jpg",
-    "/../assets/masks/1.jpg",
-    "/../assets/masks/1.jpg",
-    "/../assets/masks/1.jpg",
-    "/../assets/masks/1.jpg"
+    "/assets/masks/1.png",
+    "/assets/masks/2.png",
+    "/assets/masks/3.png",
+    "/assets/masks/4.png",
+    "/assets/masks/5.png",
+    "/assets/masks/6.png",
+    "/assets/masks/7.png",
+    "/assets/masks/8.png",
+    "/assets/masks/9.png",
+    "/assets/masks/10.png",
+    "/assets/masks/11.png"
   ];
 
   public filters: Filter[] = [
     {name: "Sepia", filterObj: new fabric.Image.filters.Sepia, isApplied: false},
-    {name: "Grayscale", filterObj: new fabric.Image.filters.Grayscale, isApplied: false}
+    {name: "Grayscale", filterObj: new fabric.Image.filters.Grayscale, isApplied: false},
+    {name: "Pixelate", filterObj: new fabric.Image.filters.Pixelate, isApplied: false},
+    {name: "Invert", filterObj: new fabric.Image.filters.Invert, isApplied: false}
   ];
 
   @ViewChild('canvasElement', {read: undefined, static: false}) el: ElementRef;
@@ -103,7 +111,7 @@ export class ImageEditorComponent implements OnInit {
   }
 
   public getMask(maskNumber: number): Observable<Blob> {
-    return this.http.get ('/assets/masks/' + maskNumber + '.jpg', {responseType: "blob"});
+    return this.http.get (this.maskURLs[maskNumber], {responseType: "blob"});
   }
 
   public save(): void {
